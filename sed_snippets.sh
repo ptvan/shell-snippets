@@ -44,3 +44,9 @@ sed '/baz/s/foo/bar/g'
 
 # substitute all occurrences of "foo" with "bar" on lines that DO NOT contains "baz"
 sed '/baz/!s/foo/bar/g'
+
+# change "scarlet", "ruby", or "puce" into "red"
+sed 's/scarlet/red/g;s/ruby/red/g;s/puce/red/g'
+
+# reverse order of lines
+sed '1!G;h;$!d'
