@@ -16,3 +16,10 @@ then
 else
     echo "ERROR : 'faces' subdir not found, exiting...."
 fi
+
+# run a command on all results of a `find`, quick and dirty:
+find ./ -type f -name "*.txt" -exec gedit "{}" \;
+
+# nicer version: print0 gives a NULL after each entry to handle tricky filenames
+# xargs batches args before passing down the pipe, a bit more efficient
+find . -type f -name "*.txt" -print0 | xargs -0 gedit
