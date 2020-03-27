@@ -29,3 +29,5 @@ find ./ -type f -name "*.txt" -exec gedit "{}" \;
 # xargs batches args before passing down the pipe, a bit more efficient
 find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 
+# by extension, move all files found in a find command to common new location
+find ./ -name '*.txt' -exec mv {} /new/path/ \;
