@@ -19,8 +19,11 @@ else
     echo "ERROR : 'faces' subdir not found, exiting...."
 fi
 
-# simply rename a lot of files
+# simply rename a lot of files using a regex
 for f in *.png; do mv -n "$f" "${f/-0}"; done
+
+# rename all files to lowercase
+for i in *; do mv "$i" "${i,,}"; done
 
 # run a command on all results of a `find`, quick and dirty:
 find ./ -type f -name "*.txt" -exec gedit "{}" \;
@@ -31,3 +34,5 @@ find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 
 # by extension, move all files found in a find command to common new location
 find ./ -name '*.txt' -exec mv {} /new/path/ \;
+
+
