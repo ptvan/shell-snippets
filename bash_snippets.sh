@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# in-line regex
+# in-line variable substitution
 echo ${str/foo/bar}
+
+# in-line regex
+if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
+    # do something
+fi
 
 # process a batch of files
 # this script works on the CMU Faces image collection
