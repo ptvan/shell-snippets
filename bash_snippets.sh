@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# in-line regex
+echo ${str/foo/bar}
+
 # process a batch of files
 # this script works on the CMU Faces image collection
 # (https://archive.ics.uci.edu/ml/datasets/CMU+Face+Images)
