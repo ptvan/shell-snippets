@@ -43,4 +43,5 @@ find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 # by extension, move all files found in a find command to common new location
 find ./ -name '*.txt' -exec mv {} /new/path/ \;
 
-
+# trim a PDF to include only certain pages using qpdf
+qpdf original.pdf --pages . 2-18 -- trimmed.pdf
