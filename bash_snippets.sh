@@ -8,7 +8,7 @@ if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
     # do something
 fi
 
-# process a batch of files
+# process a batch of files, in this case converting PGM > JPEG
 # this script works on the CMU Faces image collection
 # (https://archive.ics.uci.edu/ml/datasets/CMU+Face+Images)
 
@@ -45,3 +45,15 @@ find ./ -name '*.txt' -exec mv {} /new/path/ \;
 
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
+
+# the last command run
+!!
+
+# the last command starting with `foo`
+!foo
+
+# the last command's argument, in this case the last command was `vi somefile.txt`
+vi !$
+
+# compare 2 directories
+diff /dir1 /dir2
