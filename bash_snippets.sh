@@ -57,3 +57,7 @@ vi !$
 
 # compare 2 directories
 diff /dir1 /dir2
+
+# find all outdated pip packages and upgrade them
+pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
+
