@@ -1,4 +1,6 @@
-## EXAMPLES FOR THE 'HTSLIB' PROGRAMS `SAMTOOLS` AND `BCFTOOLS`
+############# 
+# SAMTOOLS
+#############
 
 # get help
 samtools view -?
@@ -17,3 +19,10 @@ samtools index sample.sorted.bam
 
 # extract 33rd megabase of the chromosome 1, then count alignments
 samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
+
+#############
+# BCFTOOLS
+#############
+
+# merge multi-sample VCFs
+bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
