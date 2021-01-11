@@ -50,3 +50,9 @@ sed 's/scarlet/red/g;s/ruby/red/g;s/puce/red/g'
 
 # reverse order of lines
 sed '1!G;h;$!d'
+
+# print lines that are longer than 65 characters
+sed -n '/^.\{65\}/p' 
+
+# delete all lines between "pattern1" and "pattern2"
+seq ‘/pattern1/,/pattern2/d’ < infile > outfile

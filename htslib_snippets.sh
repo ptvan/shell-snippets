@@ -29,3 +29,12 @@ bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
 
 # printing variants on a particular region:
 bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
+
+
+#############
+# TABIX
+#############
+
+# compare performance with samtools
+time tabix NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.sam.gz 11:60000-5000000 | wc
+time samtools view -F 4 -L test.bed NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.bam | wc
