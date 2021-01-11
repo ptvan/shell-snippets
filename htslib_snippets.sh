@@ -26,3 +26,6 @@ samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
 
 # merge multi-sample VCFs
 bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
+
+# printing variants on a particular region:
+bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
