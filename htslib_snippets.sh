@@ -30,6 +30,8 @@ bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
 # printing variants on a particular region:
 bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
 
+# printing only specific samples
+bcftools view -s NA20818,NA20819 filename.vcf.gz
 
 #############
 # TABIX
