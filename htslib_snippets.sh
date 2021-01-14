@@ -33,6 +33,12 @@ bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
 # printing only specific samples
 bcftools view -s NA20818,NA20819 filename.vcf.gz
 
+# printing out only the chr info:
+bcftools query -f '%CHROM\n' filename.vcf
+
+# printing out snps from file:
+bcftools view -v snps filename.vcf.gz 
+
 #############
 # TABIX
 #############
