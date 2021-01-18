@@ -43,6 +43,13 @@ bcftools view -v snps filename.vcf.gz
 # oldsamplename newsamplename
 bcftools reheader -s samplenames.txt oldfile.vcf.gz -o newfile.vcf.gz
 
+## using plugins
+# install plugins
+export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
+
+# using tag2tag to convert from PL to GL
+bcftools +tag2tag in.vcf -- -r --pl-to-gl
+
 #############
 # TABIX
 #############
