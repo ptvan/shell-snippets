@@ -50,6 +50,9 @@ export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
 # using tag2tag to convert from PL to GL
 bcftools +tag2tag in.vcf -- -r --pl-to-gl
 
+# removing INFO field from VCF
+bcftools annotate --remove INFO file.vcf.gz
+
 #############
 # TABIX
 #############
