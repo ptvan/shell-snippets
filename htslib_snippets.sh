@@ -56,6 +56,23 @@ bcftools +tag2tag in.vcf -- -r --pl-to-gl
 # removing INFO field from VCF
 bcftools annotate --remove INFO file.vcf.gz
 
+
+#############
+# BEDTOOLS
+#############
+
+# extracting promoters from a mouse genome
+
+# >head -n4 genes.bed
+# chr1    134212701    134230065    Nuak2    8    +
+# chr1    134212701    134230065    Nuak2    7    +
+# chr1    33510655    33726603    Prim2,    14    -
+# hr1    25124320    25886552    Bai3,    31    -
+
+bedtools flank -i genes.bed -g mm9.chromsizes -l 2000 -r 0 -s > genes.2kb.promoters.bed
+
+bedtools getfasta -fi mm9.fa -bed genes.2kb.promoters.bed -fo genes.2kb.promoters.bed.fa
+
 #############
 # TABIX
 #############
