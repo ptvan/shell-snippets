@@ -24,6 +24,9 @@ samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
 # BCFTOOLS
 #############
 
+# convert gVCF to VCF
+bcftools --gvcf2vcf gVCF_file.vcf filename.vcf
+
 # merge multi-sample VCFs
 bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
 
