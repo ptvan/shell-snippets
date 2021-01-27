@@ -5,6 +5,9 @@
 # get help
 samtools view -?
 
+# count the number records (unmapped and unmapped reads)
+samtools view -c filename.bam
+
 # convert SAM to BAM
 samtools view -S -b sample.sam > sample.BAM
 
