@@ -23,6 +23,9 @@ samtools index sample.sorted.bam
 # extract 33rd megabase of the chromosome 1, then count alignments
 samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
 
+# extract regions from Kraken contamination BAM
+samtools view -h sample.consensus.kraken_annotate.bosTau6.bam | grep -v "^@" | less -S
+
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 
