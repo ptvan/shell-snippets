@@ -55,4 +55,7 @@ sed '1!G;h;$!d'
 sed -n '/^.\{65\}/p' 
 
 # delete all lines between "pattern1" and "pattern2"
-seq ‘/pattern1/,/pattern2/d’ < infile > outfile
+seq ‘/pattern1/,/pattern2/d’ < infile.txt > outfile.txt
+
+# replace "^A" with tab character
+sed -e "s/$(echo -e \\001)/\\echo -e '\t'/g" file.txt
