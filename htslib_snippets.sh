@@ -54,6 +54,9 @@ bcftools view -v snps filename.vcf.gz
 # printing out only multiallelic snps:
 bcftools view -m3 -v snps filename.vcf.gz
 
+# printing out missing (uncalled) genotypes:
+bcftools view -u filenme.vcf.gz -o missing_genotypes.vcf.gz -Oz
+
 # rename samples; samplenames.txt file has the following format:
 # oldsamplename newsamplename
 bcftools reheader -s samplenames.txt oldfile.vcf.gz -o newfile.vcf.gz
