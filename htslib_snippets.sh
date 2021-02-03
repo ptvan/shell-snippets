@@ -54,11 +54,14 @@ bcftools view -v snps filename.vcf.gz
 # printing out only multiallelic snps:
 bcftools view -m3 -v snps filename.vcf.gz
 
-# split multiallelic variants (SNPs+INDELs) into several records
-bcftools norm -m -any filename.vcf.gz -o normalized.vcf.gz -Oz
-
 # printing out missing (uncalled) genotypes:
 bcftools view -u filename.vcf.gz -o missing_genotypes.vcf.gz -Oz
+
+# drop individual genotype information
+bcftools view -G filename.vcf.gz
+
+# split multiallelic variants (SNPs+INDELs) into several records
+bcftools norm -m -any filename.vcf.gz -o normalized.vcf.gz -Oz
 
 # rename samples; samplenames.txt file has the following format:
 # oldsamplename newsamplename
