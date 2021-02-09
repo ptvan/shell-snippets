@@ -46,6 +46,9 @@ find ./ -name '*.txt' -exec mv {} /new/path/ \;
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
+# convert multi-page PDFs to JPGs
+gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
+
 # the last command run
 !!
 
