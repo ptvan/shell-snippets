@@ -1,12 +1,7 @@
 #!/bin/bash
 
-# in-line variable substitution
-echo ${str/foo/bar}
 
-# in-line regex
-if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
-    # do something
-fi
+##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
 # this script works on the CMU Faces image collection
@@ -43,12 +38,33 @@ find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 # by extension, move all files found in a find command to common new location
 find ./ -name '*.txt' -exec mv {} /new/path/ \;
 
+# compare 2 directories
+diff /dir1 /dir2
+
+#### REGEX
+# in-line variable substitution
+echo ${str/foo/bar}
+
+# in-line regex
+if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
+    # do something
+fi
+
+##### CONVERSIONS
+# split paired CUE and FLAC file into individual FLAC files
+shnsplit -f file.cue -t %n-%t -o flac file.flac
+
+# convert FLAC to MP3 using parallelized ffmpeg
+parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
+
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
 # convert multi-page PDFs to JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
+
+##### SHELL SHORTCUTS
 # the last command run
 !!
 
@@ -58,14 +74,6 @@ gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 # the last command's argument, in this case the last command was `vi somefile.txt`
 vi !$
 
-# compare 2 directories
-diff /dir1 /dir2
-
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
-# split paired CUE and FLAC file into individual FLAC files
-shnsplit -f file.cue -t %n-%t -o flac file.flac
-
-# convert FLAC to MP3 using parallelized ffmpeg
-parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
