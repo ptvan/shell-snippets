@@ -61,3 +61,8 @@ diff /dir1 /dir2
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
+# split paired CUE and FLAC file into individual FLAC files
+shnsplit -f file.cue -t %n-%t -o flac file.flac
+
+# convert FLAC to MP3 using parallelized ffmpeg
+parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
