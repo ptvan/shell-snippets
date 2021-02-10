@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 ##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
@@ -60,7 +59,10 @@ parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
-# convert multi-page PDFs to JPGs
+# concatenate PDFs
+gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf"
+
+# convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
 
