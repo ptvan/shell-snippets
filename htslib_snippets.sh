@@ -1,3 +1,10 @@
+###############
+# FASTQ files
+###############
+
+# find barcodes that appear most frequently
+zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
+
 ############# 
 # SAMTOOLS
 #############
