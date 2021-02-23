@@ -1,3 +1,10 @@
+###############
+# FASTQ files
+###############
+
+# find barcodes that appear most frequently
+zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
+
 ############# 
 # SAMTOOLS
 #############
@@ -59,6 +66,9 @@ bcftools view -u filename.vcf.gz -o missing_genotypes.vcf.gz -Oz
 
 # drop individual genotype information
 bcftools view -G filename.vcf.gz
+
+# filtering using one of the INFO annotations (IDV)
+bcftools filter -sFilterName -e'IDV<5' filename.vcf
 
 # split multiallelic variants (SNPs+INDELs) into several records
 bcftools norm -m -any filename.vcf.gz -o normalized.vcf.gz -Oz

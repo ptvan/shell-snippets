@@ -41,6 +41,9 @@ find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 # by extension, move all files found in a find command to common new location
 find ./ -name '*.txt' -exec mv {} /new/path/ \;
 
+# invert match (eg. find all files that are _not_ .fastq):
+find . -name '*' -type f -not -path '*.fastq'
+
 # compare 2 directories
 diff /dir1 /dir2
 
