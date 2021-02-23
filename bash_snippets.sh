@@ -1,5 +1,9 @@
 #!/bin/bash
 
+##### LOGIC
+
+[ test_statement ] && ( then_statement ) || ( else_statement );
+
 ##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
@@ -79,3 +83,5 @@ vi !$
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
+# run a command and copy its output to OSX clipboard
+echo "Here comes the output of my failing code" | tee >(pbcopy)
