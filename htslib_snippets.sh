@@ -101,8 +101,11 @@ bcftools annotate --remove INFO file.vcf.gz
 # hr1    25124320    25886552    Bai3,    31    -
 
 bedtools flank -i genes.bed -g mm9.chromsizes -l 2000 -r 0 -s > genes.2kb.promoters.bed
-
 bedtools getfasta -fi mm9.fa -bed genes.2kb.promoters.bed -fo genes.2kb.promoters.bed.fa
+
+# converting BAM to BED
+bedtools bamtobed -i input_file.bam 
+
 
 #############
 # TABIX
