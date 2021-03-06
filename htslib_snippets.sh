@@ -106,6 +106,8 @@ bedtools getfasta -fi mm9.fa -bed genes.2kb.promoters.bed -fo genes.2kb.promoter
 # converting BAM to BED
 bedtools bamtobed -i input_file.bam 
 
+# list coverage of each target
+bedtools coverage -hist -abam my_data.bam -b my_targets.bed
 
 #############
 # TABIX
