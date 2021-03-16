@@ -76,6 +76,14 @@ gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf
 # convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
+#####  HANDLING .tar.gz ARCHIVES
+# listing contents of an archive
+tar -tzf my_archive.tar.gz
+
+# extract particular file(s) from an archive
+tar -zxvf my_archive.tar.gz file_inside.txt
+tar -xzf my_archive.gz --wildcards --no-anchored '*pattern*'
+gunzip < my_archive.tar.gz | tar -x -v --files-from files_to_extract.txt -f -
 
 ##### SHELL SHORTCUTS
 # the last command run
