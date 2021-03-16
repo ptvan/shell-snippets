@@ -27,6 +27,9 @@ samtools view -S -b sample.sam > sample.BAM
 # view the first 5 alignments
 samtools view -X sample.sorted.bam | head -n 5
 
+# simple statistics
+samtools flagstat sample.bam
+
 # sort by alignment coordinates
 samtools sort sample.bam -o sample.sorted.bam
 
@@ -35,6 +38,9 @@ samtools index sample.sorted.bam
 
 # extract 33rd megabase of the chromosome 1, then count alignments
 samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
+
+# extract only the first read from paired read BAMs
+samtools view -h -f 0x0040 paired_ends.bam > first_reads.sam
 
 # extract regions from Kraken contamination BAM
 samtools view -h sample.consensus.kraken_annotate.bosTau6.bam | grep -v "^@" | less -S
