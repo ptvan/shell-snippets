@@ -22,7 +22,8 @@ samtools idxstats filename.bam | awk '{s+=$3+$4} END {print s}'
 samtools idxstats filename.bam | awk '{s+=$3} END {print s}'
 
 # convert SAM to BAM
-samtools view -S -b sample.sam > sample.BAM
+samtools view -S -b sample.sam > sample.bam
+samtools view -bT reference.fa sample.sam > test.bam
 
 # view the first 5 alignments
 samtools view -X sample.sorted.bam | head -n 5
