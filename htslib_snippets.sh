@@ -122,6 +122,9 @@ bedtools bamtobed -i input_file.bam
 # list coverage of each target
 bedtools coverage -hist -abam my_data.bam -b my_targets.bed
 
+# get parts of `regions.bed` that are *NOT* covered by `mydata.bam`
+bedtools genomecov -ibam mydata.bam -bga | awk '$4==0' | bedtools intersect -a regions.bed -b - > matches.txt
+
 #############
 # TABIX
 #############
