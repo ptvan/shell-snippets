@@ -106,5 +106,11 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 git fetch origin pull/2/head
 git checkout -b pullrequest FETCH_HEAD
 
+# show branches
+git branch
+
+# switch to a new branch
+git checkout someexistingbranch
+
 # delete a branch
 git branch -d mybranch
