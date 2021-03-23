@@ -100,3 +100,11 @@ pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1
 
 # run a command and copy its output to OSX clipboard
 echo "Here comes the output of my failing code" | tee >(pbcopy)
+
+##### git/GitHub
+# clone from a PR
+git fetch origin pull/2/head
+git checkout -b pullrequest FETCH_HEAD
+
+# delete a branch
+git branch -d mybranch
