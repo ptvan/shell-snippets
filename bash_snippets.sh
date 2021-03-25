@@ -57,7 +57,6 @@ if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
 fi
 
 ##### CONVERSIONS
-
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
@@ -77,7 +76,7 @@ gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
 #####  HANDLING .tar.gz ARCHIVES
-# listing contents of an archive
+# list contents of an archive without extracting
 tar -tzf my_archive.tar.gz
 
 # extract particular file(s) from an archive
@@ -114,3 +113,9 @@ git checkout someexistingbranch
 
 # delete a branch
 git branch -d mybranch
+
+# unstage all staged files, revert all local uncommitted changes
+git reset
+git checkout .
+
+
