@@ -31,6 +31,11 @@ for f in *.png; do mv -n "$f" "${f/-0}"; done
 # rename all files to lowercase
 for i in *; do mv "$i" "${i,,}"; done
 
+# Recursively change all *.foo files to *.bar
+find . -type f -name '*.foo' -print0 | while IFS= read -r -d '' f; do
+  mv -- "$f" "${f%.foo}.bar"
+done
+
 # run a command on all results of a `find`, quick and dirty:
 find ./ -type f -name "*.txt" -exec gedit "{}" \;
 
