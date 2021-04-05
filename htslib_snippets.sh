@@ -90,6 +90,15 @@ bcftools norm -m -any filename.vcf.gz -o normalized.vcf.gz -Oz
 # oldsamplename newsamplename
 bcftools reheader -s samplenames.txt oldfile.vcf.gz -o newfile.vcf.gz
 
+# generate stats
+bcftools stats -s filename.vcf > filename.vchk
+
+# plot the stats
+plot-vcfstats -p outdir file.vchk
+
+# tweaking the plot
+cd  outdir && python plot.py && pdflatex summary.tex
+
 ## using plugins
 # install plugins
 export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
