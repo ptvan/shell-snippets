@@ -20,6 +20,10 @@ samtools idxstats filename.bam | awk '{s+=$3+$4} END {print s}'
 
 # count number of _mapped_ reads
 samtools idxstats filename.bam | awk '{s+=$3} END {print s}'
+samtools view -F 4 -c filename.bam
+
+# count number of _UNmapped_ reads
+samtools view -f 4 -c filename.bam
 
 # convert SAM to BAM
 samtools view -S -b sample.sam > sample.bam
