@@ -110,6 +110,10 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 git fetch origin pull/2/head
 git checkout -b pullrequest FETCH_HEAD
 
+# bring a PR up to date with the branch it's based on ('develop' in this case)
+git pull
+git merge origin/develop
+
 # show branches
 git branch
 
