@@ -1,4 +1,4 @@
-## CREDIT TO https://catonmat.net/awk-one-liners-explained-part-one
+## from https://catonmat.net/awk-one-liners-explained-part-one, among others
 
 # double-space a file
 awk '1; { print "" }'
@@ -33,3 +33,6 @@ awk '{ print $NF }'
 # print every line with >4 fields
 awk 'NF > 4'
 
+# split input.csv, which has either "577" or "132" in second field, into 2 files
+# any other values are ignored
+awk -F, '$2 == "577" || $2 == "132" { print > $2 ".csv" }' input.csv
