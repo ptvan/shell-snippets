@@ -36,3 +36,6 @@ awk 'NF > 4'
 # split input.csv, which has either "577" or "132" in second field, into 2 files
 # any other values are ignored
 awk -F, '$2 == "577" || $2 == "132" { print > $2 ".csv" }' input.csv
+
+# execute an awk script
+awk -f my_script.awk input.csv
