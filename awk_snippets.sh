@@ -1,5 +1,8 @@
 ## from https://catonmat.net/awk-one-liners-explained-part-one, among others
 
+# execute an external awk script
+awk -f my_script.awk input.csv
+
 # double-space a file
 awk '1; { print "" }'
 
@@ -37,5 +40,5 @@ awk 'NF > 4'
 # any other values are ignored
 awk -F, '$2 == "577" || $2 == "132" { print > $2 ".csv" }' input.csv
 
-# execute an awk script
-awk -f my_script.awk input.csv
+# strip alphanumeric characters from the 2nd field of a tab-delimited file
+awk -F"\t" '{gsub(/[A-Za-z]/,"",$2); print $2 }'
