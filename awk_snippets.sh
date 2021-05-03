@@ -45,3 +45,6 @@ awk -F"\t" '{gsub(/[A-Za-z]/,"",$2); print $2 }'
 
 # find the longest string in the first field
 awk '$1 > max {max=$1; maxline=$0}; END{ print max, maxline}'
+
+# print lines that DO NOT contain regex pattern	
+awk '!/regex/'
