@@ -127,4 +127,6 @@ git branch -d mybranch
 git reset
 git checkout .
 
-
+# remove file/directory from remote without removing them from local
+git rm --cached myfile.txt
+git rm --cached -r mydir/
