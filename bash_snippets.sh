@@ -1,5 +1,10 @@
 #!/bin/bash
 
+##### SET SHELL OPTIONS
+# allow recursive globbing
+shopt -s globstar
+
+
 ##### LOGIC
 
 [ test_statement ] && ( then_statement ) || ( else_statement );
