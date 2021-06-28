@@ -1,7 +1,12 @@
 #!/bin/bash
 
 ##### SET SHELL OPTIONS
-# allow recursive globbing
+# NOTE: for zsh, use `setopt`
+
+# list all set and unset options
+shopt -p
+
+# set recursive globbing, default in zsh
 shopt -s globstar
 
 
