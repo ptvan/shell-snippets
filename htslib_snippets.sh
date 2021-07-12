@@ -22,7 +22,7 @@ samtools idxstats filename.bam | awk '{s+=$3+$4} END {print s}'
 samtools idxstats filename.bam | awk '{s+=$3} END {print s}'
 samtools view -F 4 -c filename.bam
 
-# count number of _UNmapped_ reads
+# count number of _UNMAPPED_ reads
 samtools view -f 4 -c filename.bam
 
 # convert SAM to BAM
@@ -40,6 +40,9 @@ samtools sort sample.bam -o sample.sorted.bam
 
 # index, which allows fast extraction by region
 samtools index sample.sorted.bam
+
+# extract read group information
+samtools view -H sample.sorted.bam | grep '^@RG'
 
 # extract 33rd megabase of the chromosome 1, then count alignments
 samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
