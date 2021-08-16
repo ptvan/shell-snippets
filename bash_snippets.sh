@@ -9,10 +9,12 @@ shopt -p
 # set recursive globbing, default in zsh
 shopt -s globstar
 
-
 ##### LOGIC
 
 [ test_statement ] && ( then_statement ) || ( else_statement );
+
+##### PASSING COMMAND OUTPUT AS INPUT ARGUMENTS
+mv myfile.txt $(basename myfile.txt .txt).README
 
 ##### FILE HANDLING
 
