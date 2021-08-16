@@ -12,6 +12,10 @@ zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -
 # get help
 samtools view -?
 
+# convert SAM to BAM
+samtools view -S -b sample.sam > sample.bam
+samtools view -bT reference.fa sample.sam > test.bam
+
 # count the number records (unmapped and unmapped reads)
 samtools view -c filename.bam
 
@@ -24,10 +28,6 @@ samtools view -F 4 -c filename.bam
 
 # count number of _UNMAPPED_ reads
 samtools view -f 4 -c filename.bam
-
-# convert SAM to BAM
-samtools view -S -b sample.sam > sample.bam
-samtools view -bT reference.fa sample.sam > test.bam
 
 # view the first 5 alignments
 samtools view -X sample.sorted.bam | head -n 5
@@ -52,6 +52,13 @@ samtools view -h -f 0x0040 paired_ends.bam > first_reads.sam
 
 # extract regions from Kraken contamination BAM
 samtools view -h sample.consensus.kraken_annotate.bosTau6.bam | grep -v "^@" | less -S
+
+# checking to see if reads are sorted
+samtools view -H 5_110118_FC62VT6AAXX-hg18-unsort.bam
+# @HD    VN:1.0    SO:unsorted
+samtools view -H 5_110118_FC62VT6AAXX-hg18-sort.bam
+# @HD    VN:1.0    SO:coordinate
+
 
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
