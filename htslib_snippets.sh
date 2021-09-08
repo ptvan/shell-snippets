@@ -155,3 +155,10 @@ bedtools genomecov -ibam mydata.bam -bga | awk '$4==0' | bedtools intersect -a r
 # compare performance with samtools
 time tabix NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.sam.gz 11:60000-5000000 | wc
 time samtools view -F 4 -L test.bed NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.bam | wc
+
+#############
+# MUT files
+#############
+
+# convert gMUT to MUT by excluding `no_variant` calls
+grep -v no_variants input_genomic.mut > output.mut
