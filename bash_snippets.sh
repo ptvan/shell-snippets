@@ -119,6 +119,7 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 
 ##### git/GitHub
 # clone from a PR
+git branch -D pullrequest
 git fetch origin pull/2/head
 git checkout -b pullrequest FETCH_HEAD
 
