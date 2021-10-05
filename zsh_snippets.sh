@@ -5,3 +5,5 @@ setopt
 autoload -U zmv
 alias mmv="noglob zmv -W"
 
+# `take` will recursively mkdir and cd to deepest level
+take /some/really/deeply/nested/directory
