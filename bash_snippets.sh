@@ -73,6 +73,10 @@ if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
     # do something
 fi
 
+##### WORKING WITH TABULAR DATA/CSV's
+# extract the first column of a file and count unique entries
+cut -f 1 input.tsv | uniq | wc
+
 ##### CONVERSIONS
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
