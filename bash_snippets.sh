@@ -64,6 +64,11 @@ find . -name '*' -type f -not -path '*.fastq'
 # compare 2 directories
 diff /dir1 /dir2
 
+# doing math at the commandline
+echo $(( 10 + 5 )) 
+
+factor 50
+
 #### REGEX
 # in-line variable substitution
 echo ${str/foo/bar}
