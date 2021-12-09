@@ -157,6 +157,18 @@ time tabix NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.sam.gz 11:6000
 time samtools view -F 4 -L test.bed NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.bam | wc
 
 #############
+# SEQTK
+#############
+
+# randomly select 100 sequences from paired-end FASTQs,same seed to keep pairing
+seqtk sample -s100 read1.fq 10000 > sub1.fq
+seqtk sample -s100 read2.fq 10000 > sub2.fq
+
+# mask regions in BED to lower case
+seqtk seq -M region.bed in.fa > out.fa
+
+
+#############
 # MUT files
 #############
 
