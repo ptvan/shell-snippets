@@ -167,6 +167,9 @@ seqtk sample -s100 read2.fq 10000 > sub2.fq
 # mask regions in BED to lower case
 seqtk seq -M region.bed in.fa > out.fa
 
+# trim low-quality bases (based by Phred scores)
+seqtk trimfq in.fastq > out.fastq
+
 
 #############
 # MUT files
