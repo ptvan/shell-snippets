@@ -64,6 +64,23 @@ find . -name '*' -type f -not -path '*.fastq'
 # compare 2 directories
 diff /dir1 /dir2
 
+# SQL-like merge of two files on a common column
+ > cat foodtypes.txt
+ 1 Protein
+ 2 Carbohydrate
+ 3 Fat
+
+ > cat foods.txt
+ 1 Cheese 
+ 2 Potato
+ 3 Butter
+
+ > join foodtypes.txt foods.txt
+ 1 Protein Cheese
+ 2 Carbohydrate Potato
+ 3 Fat Butter
+
+
 # doing math at the commandline
 echo $(( 10 + 5 )) 
 
