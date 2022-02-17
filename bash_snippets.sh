@@ -80,6 +80,9 @@ diff /dir1 /dir2
  2 Carbohydrate Potato
  3 Fat Butter
 
+# using subshells to do tasks in parallels
+(cat list1.txt list2.txt list3.txt | sort | uniq > list123.txt) &
+(cat list4.txt list5.txt list6.txt | sort | uniq > list456.txt) &
 
 # doing math at the commandline
 echo $(( 10 + 5 )) 
