@@ -146,4 +146,6 @@ pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1
 # run a command and copy its output to OSX clipboard
 echo "Here comes the output of my failing code" | tee >(pbcopy)
 
+# compare two MUT files using VIM
+vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_file.mut)
 
