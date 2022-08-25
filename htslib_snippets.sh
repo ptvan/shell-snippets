@@ -71,6 +71,8 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 #############
 # BCFTOOLS
 #############
+# viewing VCF fields using `verticalize` (https://github.com/lindenb/verticalize):
+cat my_file.vcf | grep -vE "^##" | verticalize
 
 # convert gVCF to VCF
 bcftools --gvcf2vcf gVCF_file.vcf filename.vcf
