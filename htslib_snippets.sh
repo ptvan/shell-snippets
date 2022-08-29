@@ -32,10 +32,13 @@ samtools view -f 4 -c filename.bam
 # view the first 5 alignments
 samtools view -X sample.sorted.bam | head -n 5
 
-# view supplementary alignments
+# view secondary alignments
 # more information about SAM tags at 
 # https://broadinstitute.github.io/picard/explain-flags.html
 samtools view -cf 0x100 sample.bam
+
+# view supplementary alignments
+samtools view -cf 0x800 sample.bam
 
 # simple statistics
 samtools flagstat sample.bam
