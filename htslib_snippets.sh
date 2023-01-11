@@ -61,6 +61,10 @@ samtools view -h -f 0x0040 paired_ends.bam > first_reads.sam
 # extract regions from Kraken contamination BAM
 samtools view -h sample.consensus.kraken_annotate.bosTau6.bam | grep -v "^@" | less -S
 
+# extract reads from BAM that support a variant call in corresponding VCF
+samtools mpileup -f reference.fa -r chr22:425236-425236 alignments.bam |
+    cut -f 5 | tr '[a-z]' '[A-Z]' | fold -w 1 | sort | uniq -c
+
 # checking to see if reads are sorted
 samtools view -H 5_110118_FC62VT6AAXX-hg18-unsort.bam
 # @HD    VN:1.0    SO:unsorted
