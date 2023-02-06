@@ -30,7 +30,7 @@ samtools view -F 4 -c filename.bam
 samtools view -f 4 -c filename.bam
 
 # view the first 5 alignments
-samtools view -X sample.sorted.bam | head -n 5
+samtools view sample.sorted.bam | head -n 5
 
 # view secondary alignments
 # more information about SAM tags at 
