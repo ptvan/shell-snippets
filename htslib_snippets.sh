@@ -40,6 +40,10 @@ samtools view -cf 0x100 sample.bam
 # view supplementary alignments
 samtools view -cf 0x800 sample.bam
 
+# filter BAM to a region, but keep reads paired even if one read
+# is outside target interval
+samtools view -L regions.bed --fetch-pairs sample.bam 
+
 # simple statistics
 samtools flagstat sample.bam
 
