@@ -152,3 +152,6 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 # compare two MUT files using VIM
 vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_file.mut)
 
+# using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
+mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
+
