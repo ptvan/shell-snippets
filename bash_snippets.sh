@@ -43,10 +43,16 @@ for f in *.png; do mv -n "$f" "${f/-0}"; done
 # rename all files to lowercase
 for i in *; do mv "$i" "${i,,}"; done
 
-# Recursively change all *.foo files to *.bar
+# recursively change all *.foo files to *.bar
 find . -type f -name '*.foo' -print0 | while IFS= read -r -d '' f; do
   mv -- "$f" "${f%.foo}.bar"
 done
+
+# time execution and memory for a command 
+/usr/bin/time -f "%E real,%U user,%S sys, %M maxmem" /path/to/command.sh 
+
+# find files > 50GB in current directory, lists them and their size
+find . -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
 
 # run a command on all results of a `find`, quick and dirty:
 find ./ -type f -name "*.txt" -exec gedit "{}" \;
