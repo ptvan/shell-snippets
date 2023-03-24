@@ -48,3 +48,6 @@ awk '$1 > max {max=$1; maxline=$0}; END{ print max, maxline}'
 
 # print lines that DO NOT contain regex pattern	
 awk '!/regex/'
+
+# extract every 3rd line from file1 into file2 
+awk '!(NR % 3)' file1.txt > file2.txt 
