@@ -95,15 +95,6 @@ echo $(( 10 + 5 ))
 
 factor 50
 
-#### SCRIPTING INTERACTIVE PROMPTS WITH EXPECT
-#!/usr/bin/expect 
-set timeout -1 
-spawn sftp -oPort=22 user@remotehoust 
-expect "password:" { send "yourPASSWORD\n" }  
-expect "sftp>" { send "cd yourPATH\n" }  
-expect "sftp>" { send "reget yourFILE\n" }  
-expect "sftp>" { send "bye\n" } 
-
 #### REGEX
 # in-line variable substitution
 echo ${str/foo/bar}
