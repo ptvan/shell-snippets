@@ -112,7 +112,7 @@ cut -f 1 input.tsv | uniq | wc
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
-# split paired CUE and FLAC file into individual FLAC files
+# split paired CUE and FLAC files into individual FLAC files
 shnsplit -f file.cue -t %n-%t -o flac file.flac
 
 # convert FLAC to MP3 using parallelized ffmpeg
