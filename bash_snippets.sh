@@ -124,11 +124,14 @@ ffmpeg -ss 00:9:10 -i Video.mp4 -ss 00:1:00 -t 00:06:50 -c copy VideoClip.mp4
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
-# concatenate PDFs
+# concatenate PDFs using GhostScript
 gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf"
 
 # convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
+
+# convert multiple JPEGs into a single-page PDF with ImageMagick
+convert *.jpg -auto-orient pictures.pdf
 
 #####  HANDLING .tar.gz ARCHIVES
 # list contents of an archive without extracting
