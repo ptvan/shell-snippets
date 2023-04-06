@@ -112,7 +112,7 @@ cut -f 1 input.tsv | uniq | wc
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
-# split paired CUE and FLAC file into individual FLAC files
+# split paired CUE and FLAC files into individual FLAC files
 shnsplit -f file.cue -t %n-%t -o flac file.flac
 
 # convert FLAC to MP3 using parallelized ffmpeg
@@ -125,11 +125,14 @@ ffmpeg -ss 00:8:10 -i Video.mp4 -ss 00:1:00 -t 00:06:50 -c copy VideoClip.mp4
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
-# concatenate PDFs
+# concatenate PDFs using GhostScript
 gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf"
 
 # convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
+
+# convert multiple JPEGs into a single-page PDF with ImageMagick
+convert *.jpg -auto-orient pictures.pdf
 
 #####  HANDLING .tar.gz ARCHIVES
 # list contents of an archive without extracting
