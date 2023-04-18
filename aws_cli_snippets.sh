@@ -1,6 +1,9 @@
 # sync specific files from S3 
 aws s3 sync s3://remote-host/path/to/remote_folder/ ./ --exclude="*" --include="*.pdf"
 
+# list space usage of a particular bucket (slow if lots of files)
+aws s3 ls --summarize --human-readable --recursive s3://path/to/my/folder/
+
 # print sequence index from FASTQ stored on S3 without downloading
 aws s3 cp s3://path/to/my/fastq.gz - | gzip -d - |  head -4
 
