@@ -51,6 +51,10 @@ done
 # time execution and memory for a command 
 /usr/bin/time -f "%E real,%U user,%S sys, %M maxmem" /path/to/command.sh 
 
+# count all normal files (no links or directories), squash 'Permission 
+denied' messages
+find ./ -type f 2> /dev/null | wc -l
+
 # find files > 50GB in current directory, lists them and their size
 find . -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
 
