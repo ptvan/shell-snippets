@@ -51,8 +51,7 @@ done
 # time execution and memory for a command 
 /usr/bin/time -f "%E real,%U user,%S sys, %M maxmem" /path/to/command.sh 
 
-# count all normal files (no links or directories), squash 'Permission 
-denied' messages
+# count all normal files (no links or directories), squash 'Permission denied' messages
 find ./ -type f 2> /dev/null | wc -l
 
 # find files > 50GB in current directory, lists them and their size
@@ -113,6 +112,9 @@ fi
 # extract the first column of a file and count unique entries
 cut -f 1 input.tsv | uniq | wc
 
+# using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
+mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
+
 ##### CONVERSIONS
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
@@ -167,6 +169,4 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 # compare two MUT files using VIM
 vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_file.mut)
 
-# using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
-mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 
