@@ -116,6 +116,9 @@ cut -f 1 input.tsv | uniq | wc
 mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 
 ##### CONVERSIONS
+# convert Excel file to csv using csvkit (https://github.com/wireservice/csvkit)
+in2csv file.xlsx > file.csv
+
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
