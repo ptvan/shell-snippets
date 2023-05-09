@@ -1,7 +1,7 @@
 ## CREDIT TO https://catonmat.net/sed-one-liners-explained-part-one
 
 # double-space a file
-sed G
+sed G file.txt
 
 # double-space a file that contains some double-spaced lines
 sed '/^$/d;G' file.txt
@@ -17,8 +17,6 @@ sed '/./=' filename | sed '/./N; s/\n/ /' file.txt
 
 # convert DOS/Windows newlines (CRLF) to UNIX newlines (LF)
 sed 's/.$//' file.txt
-
-# alternatively:
 sed 's/^M$//' file.txt
 
 # convert UNIX newlines (LF) to DOS/Windows newlines (CRLF)
