@@ -82,6 +82,10 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 #############
 # BCFTOOLS
 #############
+
+# calling variants
+bcftools mpileup -Ou -f reference.fa alignments.bam | bcftools call -mv -Ob -o calls.bcf
+
 # viewing VCF fields using `verticalize` (https://github.com/lindenb/verticalize):
 cat my_file.vcf | grep -vE "^##" | verticalize
 
