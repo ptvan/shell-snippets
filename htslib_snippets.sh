@@ -83,6 +83,10 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 # BCFTOOLS
 #############
 
+## using plugins
+# install plugins
+export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
+
 # calling variants
 bcftools mpileup -Ou -f reference.fa alignments.bam | bcftools call -mv -Ob -o calls.bcf
 
@@ -95,11 +99,11 @@ bcftools --gvcf2vcf gVCF_file.vcf filename.vcf
 # merge multi-sample VCFs
 bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
 
-# printing variants on a particular region:
-bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
-
 # printing only specific samples
 bcftools view -s NA20818,NA20819 filename.vcf.gz
+
+# printing variants on a particular region:
+bcftools view -r chr20:1-200000 -s NA20818,NA20819 filename.vcf.gz
 
 # printing out only the chr info:
 bcftools query -f '%CHROM\n' filename.vcf
@@ -119,7 +123,7 @@ bcftools view -G filename.vcf.gz
 # filtering using one of the INFO annotations (IDV)
 bcftools filter -sFilterName -e'IDV<5' filename.vcf
 
-# split multiallelic variants (SNPs+INDELs) into several records
+# split multiallelic SNPs + INDELs into several records
 bcftools norm -m -any filename.vcf.gz -o normalized.vcf.gz -Oz
 
 # rename samples; samplenames.txt file has the following format:
@@ -129,15 +133,11 @@ bcftools reheader -s samplenames.txt oldfile.vcf.gz -o newfile.vcf.gz
 # generate stats
 bcftools stats -s filename.vcf > filename.vchk
 
-# plot the stats
+# plot stats
 plot-vcfstats -p outdir file.vchk
 
-# tweaking the plot
-cd  outdir && python plot.py && pdflatex summary.tex
-
-## using plugins
-# install plugins
-export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
+# tweaking plot
+cd outdir && python plot.py && pdflatex summary.tex
 
 # using tag2tag to convert from PL to GL
 bcftools +tag2tag in.vcf -- -r --pl-to-gl
