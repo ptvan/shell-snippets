@@ -141,6 +141,10 @@ gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf
 # convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
+# compress a PDF and add a title
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out_compressed.pdf -c "[ /Title (My Title Here) /DOCINFO pdfmark" -f input.pdf
+
+
 # convert multiple JPEGs into a single-page PDF with ImageMagick
 convert *.jpg -auto-orient pictures.pdf
 
