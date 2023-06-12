@@ -1,8 +1,11 @@
+# presign URL to share
+aws s3 presign s3://remote-host/path/to/file_to_be_share.tar.gz --expires-in 604800
+
 # sync specific files from S3 
 aws s3 sync s3://remote-host/path/to/remote_folder/ ./ --exclude="*" --include="*.pdf"
 
 # list files in bucket without metadata (timestamp, size)
-aws s3 ls s3://path/to/folder/ | cut -d ' ' -f 4
+aws s3 ls s3://remote-host/path/to/remote_folder/ | cut -d ' ' -f 4
 
 # list space usage of a particular bucket (slow if lots of files)
 aws s3 ls --summarize --human-readable --recursive s3://path/to/my/folder/
