@@ -5,18 +5,15 @@
 # find barcodes that appear most frequently
 zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
 
-############# 
+#############
 # SAMTOOLS
 #############
-
-# get help
-samtools view -?
 
 # convert SAM to BAM
 samtools view -S -b sample.sam > sample.bam
 samtools view -bT reference.fa sample.sam > test.bam
 
-# count the number records (unmapped and unmapped reads)
+# count number of records (includes both unmapped & unmapped reads)
 samtools view -c filename.bam
 
 # count number of reads
@@ -33,7 +30,7 @@ samtools view -f 4 -c filename.bam
 samtools view sample.sorted.bam | head -n 5
 
 # view secondary alignments
-# more information about SAM tags at 
+# more information about SAM tags at
 # https://broadinstitute.github.io/picard/explain-flags.html
 samtools view -cf 0x100 sample.bam
 
@@ -42,7 +39,7 @@ samtools view -cf 0x800 sample.bam
 
 # filter BAM to a region, but keep reads paired even if one read
 # is outside target interval
-samtools view -L regions.bed --fetch-pairs sample.bam 
+samtools view -L regions.bed --fetch-pairs sample.bam
 
 # simple statistics
 samtools flagstat sample.bam
@@ -71,21 +68,22 @@ samtools mpileup -f reference.fa -r chr22:425236-425236 alignments.bam |
 
 # checking to see if reads are sorted
 samtools view -H 5_110118_FC62VT6AAXX-hg18-unsort.bam
-# @HD    VN:1.0    SO:unsorted
+### @HD    VN:1.0    SO:unsorted
 samtools view -H 5_110118_FC62VT6AAXX-hg18-sort.bam
-# @HD    VN:1.0    SO:coordinate
-
+### @HD    VN:1.0    SO:coordinate
 
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
-
 
 #############
 # MAF files
 #############
 
-# convert from VCF to MAF using https://github.com/mskcc/vcf2maf 
+# convert VCF > MAF using https://github.com/mskcc/vcf2maf
 perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
+
+# the same repo also contains `maf2vcf.pl` for MAF > VCF
+
 
 #############
 # BCFTOOLS
