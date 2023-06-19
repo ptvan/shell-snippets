@@ -79,6 +79,14 @@ samtools view -H 5_110118_FC62VT6AAXX-hg18-sort.bam
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 
+
+#############
+# MAF files
+#############
+
+# convert from VCF to MAF using https://github.com/mskcc/vcf2maf 
+perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
+
 #############
 # BCFTOOLS
 #############
