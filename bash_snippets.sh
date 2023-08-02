@@ -71,7 +71,7 @@ find ./ -name '*.txt' -exec mv {} /new/path/ \;
 find . -name '*' -type f -not -path '*.fastq'
 
 # test for corruption in archived files
-bzip -t my_file.bz2
+bzip2 -t my_file.bz2
 gzip -t my_file.tar.gz
 
 # compare 2 directories of R libraries, find libraries missing in 4.3
