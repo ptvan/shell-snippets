@@ -70,6 +70,10 @@ find ./ -name '*.txt' -exec mv {} /new/path/ \;
 # invert match (eg. find all files that are _not_ .fastq):
 find . -name '*' -type f -not -path '*.fastq'
 
+# test for corruption in archived files
+bzip -t my_file.bz2
+gzip -t my_file.tar.gz
+
 # compare 2 directories of R libraries, find libraries missing in 4.3
 # save these to a CSV
 diff -q ./4.1 ./4.3 | grep "Only in 4.1" | cut -c14- > missing_R_libs.csv
