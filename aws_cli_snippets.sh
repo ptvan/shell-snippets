@@ -15,3 +15,8 @@ aws s3 cp s3://path/to/my/fastq.gz - | gzip -d - |  head -4
 
 # list all instances names, public IP address and status
 aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIP:PublicIpAddress,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}"
+
+# shows the latest 3 Docker images hosted on ECR
+aws ecr describe-images --repository-name docker.twinstrandbio.com/dsreportr/prod \
+--query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml \
+| tail -n 3 | awk -F'- ' '{print $2}'
