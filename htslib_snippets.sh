@@ -75,6 +75,10 @@ samtools view -H 5_110118_FC62VT6AAXX-hg18-sort.bam
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 
+# extract soft-clipped bases
+samtools view input.bam | awk '$6 ~ /S/{print $1}' | sort -k1,1 | uniq > soft-clipped-names.txt
+samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
+
 #############
 # MAF files
 #############
