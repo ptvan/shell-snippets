@@ -5,6 +5,9 @@
 # find barcodes that appear most frequently
 zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
 
+# FASTQC supports multi-threaded operation
+fastqc -o ./output_dir -t 10 *.fastq.gz
+
 #############
 # SAMTOOLS
 #############
