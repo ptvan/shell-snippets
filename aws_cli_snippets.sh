@@ -1,3 +1,10 @@
+# make new bucket
+aws s3 mb s3://remote-host/new-bucket-name --region us-west-2
+
+# remove existing bucket
+aws s3 rb s3://remote-host/bucket-to-be-removed
+aws s3 rb s3://remote-host/bucket-to-be-removed --force
+
 # presign URL to share
 aws s3 presign s3://remote-host/path/to/file_to_be_share.tar.gz --expires-in 604800
 
