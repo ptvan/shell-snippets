@@ -37,6 +37,11 @@ else
     echo "ERROR : 'faces' subdir not found, exiting...."
 fi
 
+# list the number of files in each of current directory's sub-directory
+# (depth 1)
+find . -maxdepth 1 -type d | while read -r dir
+do printf "%s:\t" "$dir"; find "$dir" -type f | wc -l; done
+
 # simply rename a lot of files using a regex
 for f in *.png; do mv -n "$f" "${f/-0}"; done
 
