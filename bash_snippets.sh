@@ -141,7 +141,11 @@ parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
 
 # concatenate list of files OF SAME CODEC+DIMENSION specified in file_list.txt
-ls file*.mp4 > file_list.txt
+> cat file_list.txt
+file short_video1.mp4
+file short_video2.mp4
+file short_video3.mp4
+
 ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_file.mp4
 
 # trim a PDF to include only certain pages using qpdf
