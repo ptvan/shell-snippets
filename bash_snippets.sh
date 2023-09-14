@@ -140,7 +140,7 @@ parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 # trim input video to starting at time index 5:10 to time index 15:30
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
 
-# concatenate list of files specified in file_list.txt
+# concatenate list of files OF SAME CODEC+DIMENSION specified in file_list.txt
 ls file*.mp4 > file_list.txt
 ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_file.mp4
 
