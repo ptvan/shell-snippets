@@ -137,8 +137,12 @@ shnsplit -f file.cue -t %n-%t -o flac file.flac
 # convert FLAC to MP3 using parallelized ffmpeg
 parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 
-# trim input video to starting at time index 5:10 to tim index 15:30
+# trim input video to starting at time index 5:10 to time index 15:30
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
+
+# concatenate list of files specified in file_list.txt
+ls file*.mp4 > file_list.txt
+ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_file.mp4
 
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
