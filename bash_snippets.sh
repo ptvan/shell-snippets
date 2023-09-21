@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# use `env` to support different bash install locations 
 
 ##### SET SHELL OPTIONS
 # NOTE: for zsh, use `setopt`
