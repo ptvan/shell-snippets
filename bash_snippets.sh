@@ -138,8 +138,14 @@ shnsplit -f file.cue -t %n-%t -o flac file.flac
 # convert FLAC to MP3 using parallelized ffmpeg
 parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 
-# trim input video to starting at time index 5:10 to time index 15:30
+# trim input video without encoding to starting at time index 5:10 to time index 15:30
+# NOTE: since many codecs use temporal compression, there may be some black video
+# at the beginning of the output
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
+
+# trim input video starting at time index 3:52 to time index 44:10, re-encoding 
+# NOTE: can take as much as 2X time as length of trimmed video
+ffmpeg -i Video.mp4 -ss "00:03:52" -to "00:44:10" -codec:v libx264 -crf 23 -pix_fmt yuv420p -codec:a aac -f mp4 -movflags faststart Video-trimmed-recoded.mp4
 
 # concatenate list of files OF SAME CODEC+DIMENSION specified in file_list.txt
 > cat file_list.txt
