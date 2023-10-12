@@ -5,7 +5,7 @@ aws s3 mb s3://remote-host/new-bucket-name --region us-west-2
 aws s3 rb s3://remote-host/bucket-to-be-removed
 aws s3 rb s3://remote-host/bucket-to-be-removed --force
 
-# presign URL to share
+# presign URL to share (maximum expiration 604800s = 7 days)
 aws s3 presign s3://remote-host/path/to/file_to_be_share.tar.gz --expires-in 604800
 
 # sync specific files from S3 
@@ -27,3 +27,26 @@ aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIP:Publi
 aws ecr describe-images --repository-name docker.twinstrandbio.com/dsreportr/prod \
 --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml \
 | tail -n 3 | awk -F'- ' '{print $2}'
+
+## attach a new (unformatted) EC2 volume to an EC2 instance
+## https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html
+# 1. list all volumes (/dev/xvdf is the new volume in this example)
+lsblk volumes
+
+# 2. list the file system being used on the volume, will say "data" if unformatted
+sudo file -s /dev/xvdf
+
+# 3. get the UUID of the volume, needed to set up automount later
+sudo lsblk -f 
+
+# 4. format volume to XFS, if "mkfs.xfs not found" do `sudo yum install xfsprogs`
+sudo mkfs -t xfs /dev/xvdf
+
+# 5. set up mount point and mount formatted empty volume
+sudo mkdir /data
+sudo mount /dev/xvdf /data
+
+# 6. add following line to  /etc/fstab to automount formatted volume
+# NOTE: UUID is from step 3 above
+UUID=aebf131c-6957-451e-8d34-ec978d9581ae  /data  xfs  defaults,nofail  0  2
+
