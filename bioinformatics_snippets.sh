@@ -146,10 +146,8 @@ bcftools reheader -s samplenames.txt oldfile.vcf.gz -o newfile.vcf.gz
 # generate stats
 bcftools stats -s filename.vcf > filename.vchk
 
-# plot stats
+# plot stats & tweak that figure
 plot-vcfstats -p outdir file.vchk
-
-# tweaking plot
 cd outdir && python plot.py && pdflatex summary.tex
 
 # using tag2tag to convert from PL to GL
@@ -158,6 +156,9 @@ bcftools +tag2tag in.vcf -- -r --pl-to-gl
 # removing INFO field from VCF
 bcftools annotate --remove INFO file.vcf.gz
 
+# use split-vep plugin to get output from VCF annotatated with
+# Ensembl Variant Effect Predictor (VEP, https://useast.ensembl.org/info/docs/tools/vep/index.html)
+bcftools +split-vep test/split-vep.vcf -f '%CHROM:%POS %Consequence\n' -d
 
 #############
 # BEDTOOLS
