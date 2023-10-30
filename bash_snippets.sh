@@ -167,6 +167,7 @@ gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 # compress a PDF and add a title
 gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out_compressed.pdf -c "[ /Title (My Title Here) /DOCINFO pdfmark" -f input.pdf
 
+## Pandoc
 # convert from Markdown to iPython notebook
 pandoc input.md -o output.ipynb
 
@@ -179,8 +180,12 @@ pandoc -s input.tex -o output.docx
 # convert from DOCX to Markdown, including math
 pandoc -s input.docx -t markdown -o output.md
 
-# convert multiple JPEGs into a single-page PDF with ImageMagick
+## ImageMagick
+# convert multiple JPEGs into a single-page PDF
 convert *.jpg -auto-orient pictures.pdf
+
+# create a single-image montage of multiple images
+magick montage  '*.jpg' -geometry 50x50+2+2  image_index.gif
 
 #####  HANDLING .tar.gz ARCHIVES
 # list contents of an archive without extracting
