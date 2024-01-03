@@ -17,6 +17,17 @@ shopt -s globstar
 ##### PASSING COMMAND OUTPUT AS INPUT ARGUMENTS
 mv myfile.txt $(basename myfile.txt .txt).README
 
+##### PROCESS MANAGEMENT
+
+# searching for a specific process, returns a list of process IDs
+pgrep myprocess | killall
+
+# list valid signals accepted by `kill`
+kill -l 
+
+# send SIGINT to all processes owned by current user, gentler than -9
+kill -2 -1
+
 ##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
