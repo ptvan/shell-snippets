@@ -51,3 +51,6 @@ awk '!/regex/'
 
 # extract every 3rd line from file1 into file2 
 awk '!(NR % 3)' file1.txt > file2.txt 
+
+# execute a command on each item of incoming pipe 
+ls *.fq.gz | awk 'dx upload --overwrite $1'
