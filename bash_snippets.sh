@@ -120,6 +120,11 @@ echo $(( 10 + 5 ))
 
 factor 50
 
+# split a large file into smaller files using a specified pattern 
+# prefix each small file with another pattern
+# eg. using ALFRED microhap (https://alfred.med.yale.edu/alfred/selectDownload/Microhap_alleleF_198.txt)
+split -p '----------'  Microhap_alleleF_198.txt out
+
 #### REGEX
 # in-line variable substitution
 echo ${str/foo/bar}
