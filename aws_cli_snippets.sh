@@ -8,8 +8,9 @@ aws s3 rb s3://remote-host/bucket-to-be-removed --force
 # presign URL to share (maximum expiration 604800s = 7 days)
 aws s3 presign s3://remote-host/path/to/file_to_be_share.tar.gz --expires-in 604800
 
-# sync specific files from S3 
+# sync specific files from S3 by extension or pattern 
 aws s3 sync s3://remote-host/path/to/remote_folder/ ./ --exclude="*" --include="*.pdf"
+aws s3 sync s3://remote-host/path/to/remote_folder/ ./ --exclude="*" --include="*raw.mapped.ba[im]" --exclude="Control_*"
 
 # list files in bucket without metadata (timestamp, size)
 aws s3 ls s3://remote-host/path/to/remote_folder/ | cut -d ' ' -f 4
