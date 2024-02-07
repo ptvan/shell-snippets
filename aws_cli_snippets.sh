@@ -15,6 +15,9 @@ aws s3 sync s3://remote-host/path/to/remote_folder/ ./ --exclude="*" --include="
 # list files in bucket without metadata (timestamp, size)
 aws s3 ls s3://remote-host/path/to/remote_folder/ | cut -d ' ' -f 4
 
+# list files modified from YYYY-MM-DD to now, not supported by CLI so use s3api instead
+aws s3api list-objects-v2 --bucket BUCKET_NAME  --query 'Contents[?LastModified>=`YYYY-MM-DD`].Key'
+
 # list space usage of a particular bucket (slow if lots of files)
 aws s3 ls --summarize --human-readable --recursive s3://path/to/my/folder/
 
