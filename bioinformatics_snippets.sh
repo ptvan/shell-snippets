@@ -12,9 +12,10 @@ fastqc -o ./output_dir -t 10 *.fastq.gz
 # SAMTOOLS
 #############
 
-# convert SAM to BAM
+# interconvert SAM <-> BAM
 samtools view -S -b sample.sam > sample.bam
 samtools view -bT reference.fa sample.sam > test.bam
+samtools view -h -o out.sam in.bam
 
 # count number of records (includes both unmapped & unmapped reads)
 samtools view -c filename.bam
@@ -87,9 +88,8 @@ samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 #############
 
 # convert VCF > MAF using https://github.com/mskcc/vcf2maf
-perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
-
 # the same repo also contains `maf2vcf.pl` for MAF > VCF
+perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
 
 
 #############
@@ -212,4 +212,4 @@ seqtk trimfq in.fastq > out.fastq
 #############
 
 # convert gMUT to MUT by excluding `no_variant` calls
-grep -v no_variants input_genomic.mut > output.mut
+grep -v no_variant input_genomic.mut > output.mut
