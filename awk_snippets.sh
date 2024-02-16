@@ -6,6 +6,9 @@ awk -f my_script.awk input.csv
 # double-space a file
 awk '1; { print "" }'
 
+# change spaces to tabs
+awk -v OFS="\t" '$1=$1' infile > outfile
+
 # number lines in each file separately
 awk '{ print FNR "\t" $0 }'
 
