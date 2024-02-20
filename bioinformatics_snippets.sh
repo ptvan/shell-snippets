@@ -91,6 +91,12 @@ samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 # the same repo also contains `maf2vcf.pl` for MAF > VCF
 perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
 
+#############
+# VEP
+#############
+
+ ./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
+
 
 #############
 # BCFTOOLS
