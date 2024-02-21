@@ -94,9 +94,13 @@ perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
 #############
 # VEP
 #############
+# installing VEP locally is annoying, pull from DockerHub instead 
+# also the human database is ~23GB
+docker pull ensemblorg/ensembl-vep
+sudo docker run -v /home/ptv/working:/working  -it ensemblorg/ensembl-vep 
 
- ./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
-
+# if actually installed locally 
+./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
 
 #############
 # BCFTOOLS
