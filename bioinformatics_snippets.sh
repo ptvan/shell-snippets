@@ -102,6 +102,18 @@ sudo docker run -v /home/ptv/working:/working  -it ensemblorg/ensembl-vep
 # if actually installed locally 
 ./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
 
+
+#############
+# SNPEFF
+#############
+# list supported databases & download the one we want
+java -jar snpEff.jar databases
+java -jar snpEff.jar download -v GRCh38.14
+
+# annotate using clinVar
+java -Xmx8g -jar SnpSift.jar  annotate -v protocols/db/clinvar_00-latest.vcf \
+    -stats variant_stats.html input.vcf > output.clinvar.vcf
+
 #############
 # BCFTOOLS
 #############
