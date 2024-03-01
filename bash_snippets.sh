@@ -222,6 +222,10 @@ gunzip < my_archive.tar.gz | tar -x -v --files-from files_to_extract.txt -f -
 # the last command's argument, in this case the last command was `vi somefile.txt`
 vi !$
 
+# can also replace in-line for next command, eg.
+sudo systemctl status sshd
+!!:s/status/start/    # replace `status` with `start` and execute
+
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
