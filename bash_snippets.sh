@@ -159,6 +159,9 @@ parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 # at the beginning of the output
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
 
+# copy out two sections of video into 2 new files without re-encoding
+ffmpeg -i input.avi -vcodec copy -acodec copy -ss 00:00:00 -t 00:10:00 output1.avi -vcodec copy -acodec copy -ss 00:20:00 -t 00:30:00 output2.avi
+
 # trim input video starting at time index 3:52 to time index 44:10, re-encoding 
 # NOTE: can take as much as 2X time as length of trimmed video
 ffmpeg -i Video.mp4 -ss "00:03:52" -to "00:44:10" -codec:v libx264 -crf 23 -pix_fmt yuv420p -codec:a aac -f mp4 -movflags faststart Video-trimmed-recoded.mp4
