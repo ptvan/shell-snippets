@@ -28,6 +28,12 @@ sed 's/^[ \t]*//' file.txt
 # delete trailing tabs and spaces from each line
 sed 's/[ \t]*$//' file.txt
 
+# remove everything between double quotes, saving changes (Linux)
+sed -i -e 's/\".*\"//' *.txt
+
+# remove everything between double quotes, saving changes (OSX, notice extra quote param)
+sed -i '' -e 's/\".*\"//' *.txt
+
 # substitute the fourth occurrence of "foo" with "bar"
 sed 's/foo/bar/4' file.txt
 
