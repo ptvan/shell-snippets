@@ -236,6 +236,9 @@ seqtk trimfq in.fastq > out.fastq
 # convert gMUT to MUT by excluding `no_variant` calls
 grep -v no_variant input_genomic.mut > output.mut
 
+# compare two MUT files using VIM
+vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_file.mut)
+
 
 #############
 # DEEPTOOLS

@@ -134,19 +134,23 @@ if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
     # do something
 fi
 
-##### WORKING WITH TABULAR DATA/CSV's
+##### WORKING WITH TEXT DATA/CSV's
 # extract the first column of a file and count unique entries
 cut -f 1 input.tsv | uniq | wc
 
 # using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
 mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 
-##### CONVERSIONS
-# convert Excel file to csv using csvkit (https://github.com/wireservice/csvkit)
+# list columns of a CSV using CSVKit (https://github.com/wireservice/csvkit)
+csvcut -n data.csv
+
+# convert Excel file to csv
 in2csv file.xlsx > file.csv
 
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
+
+##### VIDEO OPERATIONS
 
 # split paired CUE and FLAC files into individual FLAC files
 shnsplit -f file.cue -t %n-%t -o flac file.flac
@@ -160,7 +164,7 @@ parallel ffmpeg -i {} -qscale:a 0 {.}.mp3 ::: ./*.flac
 ffmpeg -accurate_seek -i Video.mp4 -ss 00:05:10 -to 00:15:30 -c:v copy -c:a copy VideoClip.mp4 
 
 # copy out two sections of video into 2 new files without re-encoding
-ffmpeg -i input.avi -vcodec copy -acodec copy -ss 00:00:00 -t 00:10:00 output1.avi -vcodec copy -acodec copy -ss 00:20:00 -t 00:30:00 output2.avi
+ffmpeg -i Video.avi -vcodec copy -acodec copy -ss 00:00:00 -t 00:10:00 output1.avi -vcodec copy -acodec copy -ss 00:20:00 -t 00:30:00 output2.avi
 
 # trim input video starting at time index 3:52 to time index 44:10, re-encoding 
 # NOTE: can take as much as 2X time as length of trimmed video
@@ -172,19 +176,20 @@ file short_video1.mp4
 file short_video2.mp4
 file short_video3.mp4
 
-ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_file.mp4
+ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_long_video.mp4
 
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
-# concatenate PDFs using GhostScript
+## Ghostscript
+# concatenate PDFs 
 gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf"
 
 # convert a multi-page PDF to multiple single JPGs
 gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 
 # compress a PDF and add a title
-gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out_compressed.pdf -c "[ /Title (My Title Here) /DOCINFO pdfmark" -f input.pdf
+gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out_compressed.pdf -c "[ /Title (Document Title) /DOCINFO pdfmark" -f input.pdf
 
 ## Pandoc
 # convert from Markdown to iPython notebook
@@ -232,10 +237,6 @@ sudo systemctl status sshd
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
-# run a command and copy its output to OSX clipboard
+# OSX-only: run a command and copy its output to clipboard
 echo "Here comes the output of my failing code" | tee >(pbcopy)
-
-# compare two MUT files using VIM
-vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_file.mut)
-
 
