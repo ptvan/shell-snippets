@@ -141,6 +141,10 @@ cut -f 1 input.tsv | uniq | wc
 # using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
 mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 
+# extract certain fields from a JSON using jq (https://github.com/jqlang/jq) and tabularize into CSV:
+jq -r '["destination_DOI", "year"] , (.message.reference[] | [.DOI,.year]) \
+           | @csv' prob1.json > destinations.csv
+
 # list columns of a CSV using CSVKit (https://github.com/wireservice/csvkit)
 csvcut -n data.csv
 
