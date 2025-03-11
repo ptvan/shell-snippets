@@ -76,6 +76,9 @@ samtools view -H 5_110118_FC62VT6AAXX-hg18-unsort.bam
 samtools view -H 5_110118_FC62VT6AAXX-hg18-sort.bam
 ### @HD    VN:1.0    SO:coordinate
 
+# filter out alignments with MAPQ < 2
+samtools view -bq 2 original.bam > quality2_filtered.bam
+
 # remove "Chr" prefix in header
 samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 
