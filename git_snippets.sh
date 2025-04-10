@@ -23,3 +23,6 @@ git checkout .
 # remove file/directory from remote without removing them from local
 git rm --cached myfile.txt
 git rm --cached -r mydir/
+
+# discard untracked changes, reverting to previous version
+git restore file_with_changes.txt
