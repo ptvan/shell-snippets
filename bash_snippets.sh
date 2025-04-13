@@ -138,14 +138,18 @@ fi
 # extract the first column of a file and count unique entries
 cut -f 1 input.tsv | uniq | wc
 
-# using Miller (https://github.com/johnkerl/miller/) to work with CSVs and JSON
+## Miller (https://github.com/johnkerl/miller/) works on CSVs and JSON
+# remove duplicate entries for column1
 mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 
-# extract certain fields from a JSON using jq (https://github.com/jqlang/jq) and tabularize into CSV:
+# run SQL-like statements
+mlr --csv filter '$status != "down" && $upsec >= 10000' *.csv
+
+## jq (https://github.com/jqlang/jq) can extract fields from JSONs and tabularize into CSV:
 jq -r '["destination_DOI", "year"] , (.message.reference[] | [.DOI,.year]) \
            | @csv' prob1.json > destinations.csv
 
-# list columns of a CSV using CSVKit (https://github.com/wireservice/csvkit)
+## CSVKit (https://github.com/wireservice/csvkit) list columns
 csvcut -n data.csv
 
 # convert Excel file to csv
