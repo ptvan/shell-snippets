@@ -1,4 +1,8 @@
 ##### git/GitHub
+# show remote URL
+git config --get remote.origin.url
+git remote show origin
+
 # clone from a PR
 git fetch origin pull/1888/head
 git checkout -b a_temporary_branch FETCH_HEAD
