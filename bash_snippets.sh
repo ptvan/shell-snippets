@@ -10,6 +10,20 @@ shopt -p
 # set recursive globbing, default in zsh
 shopt -s globstar
 
+##### BASH SHELL SHORTCUTS
+# the last command run
+!!
+
+# the last command starting with `foo`
+!foo
+
+# the last command's argument, in this case the last command was `vi somefile.txt`
+vi !$
+
+# can also replace in-line for next command, eg.
+sudo systemctl status sshd
+!!:s/status/start/    # replace `status` with `start` and execute
+
 ##### LOGIC
 
 [ test_statement ] && ( then_statement ) || ( else_statement );
@@ -158,7 +172,7 @@ in2csv file.xlsx > file.csv
 # recursively convert all files from one character encoding to another
 find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
-##### VIDEO OPERATIONS
+##### WORKING WITH VIDEO FILES
 
 # split paired CUE and FLAC files into individual FLAC files
 shnsplit -f file.cue -t %n-%t -o flac file.flac
@@ -189,7 +203,7 @@ ffmpeg -f concat -safe 0 -i file_list.txt -c copy concatenated_long_video.mp4
 # trim a PDF to include only certain pages using qpdf
 qpdf original.pdf --pages . 2-18 -- trimmed.pdf
 
-## Ghostscript
+##### Ghostscript
 # concatenate PDFs 
 gs -sDEVICE=pdfwrite -sOutputFile="out.pdf" -dNOPAUSE -dBATCH "in1.pdf" "in2.pdf"
 
@@ -199,7 +213,7 @@ gs -dNOPAUSE -dBATCH -sDEVICE=jpeg -r96 -sOutputFile='page-%00d.jpg' input.pdf
 # compress a PDF and add a title
 gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/ebook -dNOPAUSE -dQUIET -dBATCH -sOutputFile=out_compressed.pdf -c "[ /Title (Document Title) /DOCINFO pdfmark" -f input.pdf
 
-## Pandoc
+##### Pandoc
 # convert from Markdown to iPython notebook
 pandoc input.md -o output.ipynb
 
@@ -212,12 +226,15 @@ pandoc -s input.tex -o output.docx
 # convert from DOCX to Markdown, including math
 pandoc -s input.docx -t markdown -o output.md
 
-## ImageMagick
+##### ImageMagick
 # convert multiple JPEGs into a single-page PDF
 convert *.jpg -auto-orient pictures.pdf
 
 # create a single-image montage of multiple images
 magick montage  '*.jpg' -geometry 50x50+2+2  image_index.gif
+
+##### render Graphviz source files into images
+dot Tpng -O Graphviz_directed_graph.txt
 
 #####  HANDLING .tar.gz ARCHIVES
 # list contents of an archive without extracting
@@ -227,20 +244,6 @@ tar -tzf my_archive.tar.gz
 tar -zxvf my_archive.tar.gz file_inside.txt
 tar -xzf my_archive.gz --wildcards --no-anchored '*pattern*'
 gunzip < my_archive.tar.gz | tar -x -v --files-from files_to_extract.txt -f -
-
-##### BASH SHELL SHORTCUTS
-# the last command run
-!!
-
-# the last command starting with `foo`
-!foo
-
-# the last command's argument, in this case the last command was `vi somefile.txt`
-vi !$
-
-# can also replace in-line for next command, eg.
-sudo systemctl status sshd
-!!:s/status/start/    # replace `status` with `start` and execute
 
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
