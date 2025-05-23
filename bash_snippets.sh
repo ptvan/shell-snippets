@@ -101,10 +101,6 @@ find ./ -name '*.txt' -exec mv {} /new/path/ \;
 # invert match (eg. find all files that are _not_ .fastq):
 find . -name '*' -type f -not -path '*.fastq'
 
-# test for corruption in archived files
-bzip2 -t my_file.bz2
-gzip -t my_file.tar.gz
-
 # compare 2 directories of R libraries, find libraries missing in 4.3
 # save these to a CSV
 diff -q ./4.1 ./4.3 | grep "Only in 4.1" | cut -c14- > missing_R_libs.csv
@@ -245,9 +241,21 @@ tar -zxvf my_archive.tar.gz file_inside.txt
 tar -xzf my_archive.gz --wildcards --no-anchored '*pattern*'
 gunzip < my_archive.tar.gz | tar -x -v --files-from files_to_extract.txt -f -
 
+# test for corruption in archived files
+bzip2 -t my_file.bz2
+gzip -t my_file.tar.gz
+
+##### GENERAL OPERATIONS
+
 # find all outdated pip packages and upgrade them
 pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U
 
 # OSX-only: run a command and copy its output to clipboard
 echo "Here comes the output of my failing code" | tee >(pbcopy)
 
+## handling Java Runtime Environments
+# listing currently-installed JREs 
+/usr/libexec/java_home
+
+# switch to different JRE (manually, without jEnv)
+/usr/libexec/java_home -v 11
