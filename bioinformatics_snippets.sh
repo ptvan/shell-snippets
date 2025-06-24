@@ -8,6 +8,16 @@ zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -
 # FASTQC supports multi-threaded operation
 fastqc -o ./output_dir -t 10 *.fastq.gz
 
+###############
+# BLAST
+###############
+
+# build a local database
+makeblastdb -in ref_viruses.fa -dbtype nucl -parse_seqids -out ref_viruses_db
+
+# BLAST against database, output in tabular form
+blastn -db db/ref_viruses_rep_genomes -query inputs.fa -outfmt 6
+
 #############
 # SAMTOOLS
 #############
