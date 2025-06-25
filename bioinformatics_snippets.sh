@@ -196,11 +196,13 @@ bcftools annotate --remove INFO file.vcf.gz
 bcftools +split-vep test/split-vep.vcf -f '%CHROM:%POS %Consequence\n' -d
 
 #############
-# BEDTOOLS
+# BED files
 #############
 
-# extracting promoters from a mouse genome
+# eliminate identical entries from a BED file
+sort -k1,1 -k2,2n input.bed | rev | uniq -f1 | rev
 
+## extracting promoters from a mouse genome
 # >head -n4 genes.bed
 # chr1    134212701    134230065    Nuak2    8    +
 # chr1    134212701    134230065    Nuak2    7    +
@@ -257,9 +259,6 @@ vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_fi
 # DEEPTOOLS
 #############
 
-# eliminate identical entries from a BED file
-sort -k1,1 -k2,2n input.bed | rev | uniq -f1 | rev
-
 # create coverage (in the form of a bigWig/bedGraph) file from a BAM file
 bamCoverage -b reads.bam -o coverage.bw --numberOfProcessors 8
 
@@ -273,6 +272,11 @@ plotCorrelation -in comparison.npz \
 --whatToPlot scatterplot \
 -o scatterplot_PearsonCorr_bigwigScores.png   \
 --outFileCorMatrix PearsonCorr_bigwigScores.tab
+
+# calculate GC bias for a human sample
+computeGCBias -b H3K27Me3.bam --effectiveGenomeSize 2695000000
+   --genome genome.2bit -l 200 -freq freq_test.txt
+   --region X --biasPlot test_gc.png
 
 # scale mouse and fly GC contents and plot heatmaps for comparison
 computeMatrix scale-regions -S mouse_GCcontent.bw -R RefSeq_genes_uniq.bed  -m 10000 -b 3000 -a 3000 -out mouse_matrix.tab.gz
