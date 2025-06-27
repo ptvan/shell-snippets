@@ -1,25 +1,56 @@
-###############
-# FASTQ files
-###############
+######################
+# FASTA / FASTQ files
+######################
 
-# find barcodes that appear most frequently
-zcat filename.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
-
-# FASTQC supports multi-threaded operation
-fastqc -o ./output_dir -t 10 *.fastq.gz
-
-###############
-# BLAST
-###############
-
-# build a local database
+# build a local BLAST database
 makeblastdb -in ref_viruses.fa -dbtype nucl -parse_seqids -out ref_viruses_db
 
 # BLAST against database, output in tabular form
 blastn -db db/ref_viruses_rep_genomes -query inputs.fa -outfmt 6
 
+# find barcodes that appear most frequently
+zcat sample.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
+
+# FASTQC supports multi-threaded operation
+fastqc -o ./output_dir -t 10 *.fastq.gz
+
+# randomly select 100 sequences from paired-end FASTQs,same seed to keep pairing
+seqtk sample -s100 read1.fq 10000 > sub1.fq
+seqtk sample -s100 read2.fq 10000 > sub2.fq
+
+# mask regions in BED to lower case
+seqtk seq -M region.bed in.fa > out.fa
+
+# trim low-quality bases (based by Phred scores)
+seqtk trimfq in.fastq > out.fastq
+
 #############
-# SAMTOOLS
+# BED files
+#############
+# eliminate identical entries from a BED file
+sort -k1,1 -k2,2n input.bed | rev | uniq -f1 | rev
+
+## extracting promoters from a mouse genome
+# >head -n4 genes.bed
+# chr1    134212701    134230065    Nuak2    8    +
+# chr1    134212701    134230065    Nuak2    7    +
+# chr1    33510655    33726603    Prim2,    14    -
+# hr1    25124320    25886552    Bai3,    31    -
+bedtools flank -i genes.bed -g mm9.chromsizes -l 2000 -r 0 -s > genes.2kb.promoters.bed
+bedtools getfasta -fi mm9.fa -bed genes.2kb.promoters.bed -fo genes.2kb.promoters.bed.fa
+
+# converting BAM to BED
+bedtools bamtobed -i input_file.bam 
+
+# list coverage of each target
+bedtools coverage -hist -abam my_data.bam -b my_targets.bed
+
+# get parts of `regions.bed` that are *NOT* covered by `mydata.bam`
+bedtools genomecov -ibam mydata.bam -bga | awk '$4==0' | bedtools intersect -a regions.bed -b - > matches.txt
+
+
+#############
+# BAM files
 #############
 
 # interconvert SAM <-> BAM
@@ -60,12 +91,17 @@ samtools flagstat sample.bam
 
 # sort by alignment coordinates
 samtools sort sample.bam -o sample.sorted.bam
+sambamba sort sample.bam -o sample.sorted.bam
 
 # index, which allows fast extraction by region
 samtools index sample.sorted.bam
+sambamba index sample.sorted.bam
 
 # extract read group information
 samtools view -H sample.sorted.bam | grep '^@RG'
+
+# extract bases 100 - 200 of chromosome 1
+sambamba slice sample.bam chr1:100-200 sample.chr1.bam
 
 # extract 33rd megabase of the chromosome 1, then count alignments
 samtools view sample.sorted.bam 1:33000000-34000000 | wc -l
@@ -96,42 +132,14 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 samtools view input.bam | awk '$6 ~ /S/{print $1}' | sort -k1,1 | uniq > soft-clipped-names.txt
 samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 
-#############
-# MAF files
-#############
-
-# convert VCF > MAF using https://github.com/mskcc/vcf2maf
-# the same repo also contains `maf2vcf.pl` for MAF > VCF
-perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
+# mark duplicate reads
+sambamba markdup sample.bam sample.nodups.bam
 
 #############
-# VEP
-#############
-# installing VEP locally is annoying, pull from DockerHub instead 
-# also the human database is ~23GB
-docker pull ensemblorg/ensembl-vep
-sudo docker run -v /home/ptv/working:/working  -it ensemblorg/ensembl-vep 
-
-# if actually installed locally 
-./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
-
-
-#############
-# SNPEFF
-#############
-# list supported databases & download the one we want
-java -jar snpEff.jar databases
-java -jar snpEff.jar download -v GRCh38.14
-
-# annotate using clinVar
-java -Xmx8g -jar SnpSift.jar  annotate -v protocols/db/clinvar_00-latest.vcf \
-    -stats variant_stats.html input.vcf > output.clinvar.vcf
-
-#############
-# BCFTOOLS
+# VCF files
 #############
 
-## using plugins
+## using plugins with bcftools
 # install plugins
 export BCFTOOLS_PLUGINS=~/bin/bcftools-1.6/plugins/
 
@@ -196,53 +204,38 @@ bcftools annotate --remove INFO file.vcf.gz
 bcftools +split-vep test/split-vep.vcf -f '%CHROM:%POS %Consequence\n' -d
 
 #############
-# BED files
+# VEP
 #############
+# installing VEP locally is annoying, also the human database is ~23GB 
+./vep -i input.vcf.gz --cached --vcf --fields "Allele,Consequence,Feature_type, Feature" -o output.vcf
 
-# eliminate identical entries from a BED file
-sort -k1,1 -k2,2n input.bed | rev | uniq -f1 | rev
-
-## extracting promoters from a mouse genome
-# >head -n4 genes.bed
-# chr1    134212701    134230065    Nuak2    8    +
-# chr1    134212701    134230065    Nuak2    7    +
-# chr1    33510655    33726603    Prim2,    14    -
-# hr1    25124320    25886552    Bai3,    31    -
-
-bedtools flank -i genes.bed -g mm9.chromsizes -l 2000 -r 0 -s > genes.2kb.promoters.bed
-bedtools getfasta -fi mm9.fa -bed genes.2kb.promoters.bed -fo genes.2kb.promoters.bed.fa
-
-# converting BAM to BED
-bedtools bamtobed -i input_file.bam 
-
-# list coverage of each target
-bedtools coverage -hist -abam my_data.bam -b my_targets.bed
-
-# get parts of `regions.bed` that are *NOT* covered by `mydata.bam`
-bedtools genomecov -ibam mydata.bam -bga | awk '$4==0' | bedtools intersect -a regions.bed -b - > matches.txt
+# pull from DockerHub instead
+docker pull ensemblorg/ensembl-vep
+sudo docker run -v /home/ptv/working:/working -it ensemblorg/ensembl-vep 
 
 #############
-# TABIX
+# SNPEFF
 #############
+# list supported databases & download the one we want
+java -jar snpEff.jar databases
+java -jar snpEff.jar download -v GRCh38.14
 
-# compare performance with samtools
-time tabix NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.sam.gz 11:60000-5000000 | wc
-time samtools view -F 4 -L test.bed NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.bam | wc
+# annotate using clinVar
+java -Xmx8g -jar SnpSift.jar  annotate -v protocols/db/clinvar_00-latest.vcf \
+    -stats variant_stats.html input.vcf > output.clinvar.vcf
+
+# annotate using DbSnp
+java -Xmx8g -jar SnpSift.jar annotate -dbsnp input.vcf > output.dbSnp.vcf
+
+# further annotate the output above using SnpEff
+java -Xmx8g -jar snpEff.jar eff -v GRCh38.14 output.dbSnp.vcf > output.ann.vcf
 
 #############
-# SEQTK
+# MAF files
 #############
-
-# randomly select 100 sequences from paired-end FASTQs,same seed to keep pairing
-seqtk sample -s100 read1.fq 10000 > sub1.fq
-seqtk sample -s100 read2.fq 10000 > sub2.fq
-
-# mask regions in BED to lower case
-seqtk seq -M region.bed in.fa > out.fa
-
-# trim low-quality bases (based by Phred scores)
-seqtk trimfq in.fastq > out.fastq
-
+# convert VCF > MAF using https://github.com/mskcc/vcf2maf
+# the same repo also contains `maf2vcf.pl` for MAF > VCF
+perl vcf2maf.pl --input-vcf input.vcf --output-maf output.maf
 
 #############
 # MUT files
@@ -256,9 +249,17 @@ vimdiff  <(cut -f1-3,5-12,14-15 first_file.mut) <(cut -f1-3,5-12,14-15 second_fi
 
 
 #############
-# DEEPTOOLS
+# TABIX
 #############
 
+# compare performance with samtools
+time tabix NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.sam.gz 11:60000-5000000 | wc
+time samtools view -F 4 -L test.bed NA18553.chrom11.ILLUMINA.bwa.CHB.low_coverage.20120522.bam | wc
+
+
+#############
+# DEEPTOOLS
+#############
 # create coverage (in the form of a bigWig/bedGraph) file from a BAM file
 bamCoverage -b reads.bam -o coverage.bw --numberOfProcessors 8
 
