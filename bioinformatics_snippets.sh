@@ -285,3 +285,13 @@ plotHeatmap -m mouse_matrix.tab.gz -out scaledmouseGC.png --colorMap YlGnBu --re
 
 computeMatrix scale-regions -S fly_GCcontent.bw -R RefSeq_genes_uniq.bed -m 3000 -b 1000 -a 1000 -out fly_matrix.tab.gz
 plotHeatmap -m fly_matrix.tab.gz -out scaledflyGC.png --colorMap YlGnBu --regionsLabel 'fly genes'
+
+#############################
+# Entrez Direct E-Utilities #
+#############################
+
+# get the SRA RunInfo for a given GSE
+GSE_ID=GSE162380
+BIOPROJECT_ID=$(esearch -db gds -query $GSE_ID | efetch -format docsum | xtract -pattern DocumentSummary -element BioProject)
+esearch -db sra -query $BIOPROJECT_ID | efetch -format runinfo  > ${GSE_ID}_runinfo.csv
+
