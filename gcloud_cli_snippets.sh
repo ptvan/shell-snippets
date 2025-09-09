@@ -1,5 +1,6 @@
 ## config
 gcloud config set project my-project-name-here
+gcloud config set compute/region us-west-1a
 
 ## connect
 gcloud compute ssh my-host-name-here --zone=us-central1-a

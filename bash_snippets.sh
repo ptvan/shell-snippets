@@ -259,3 +259,4 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 
 # switch to different JRE (manually, without jEnv)
 /usr/libexec/java_home -v 11
+
