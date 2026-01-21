@@ -286,6 +286,23 @@ plotHeatmap -m mouse_matrix.tab.gz -out scaledmouseGC.png --colorMap YlGnBu --re
 computeMatrix scale-regions -S fly_GCcontent.bw -R RefSeq_genes_uniq.bed -m 3000 -b 1000 -a 1000 -out fly_matrix.tab.gz
 plotHeatmap -m fly_matrix.tab.gz -out scaledflyGC.png --colorMap YlGnBu --regionsLabel 'fly genes'
 
+# plot scores over a genomic region, one plot panel per sample
+computeMatrix scale-regions \
+    -R genes.bed \
+    -S sample1.bw sample2.bw \
+    -b 1000 -a 1000 \
+    --binSize 10 \
+    --referencePoint TSS \
+    -o comparison.gz \
+    --skipZeros
+
+plotProfile -m comparison.gz \
+    -o profile.png \
+    --outFileNameData comparison.tab \
+    --plotTitle "Sample 1 vs Sample 2 at TSS" \
+    --legend -yMin 0 --yMax 50 \
+    --perGroup
+
 #############################
 # Entrez Direct E-Utilities #
 #############################
