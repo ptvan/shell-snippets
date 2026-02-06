@@ -15,6 +15,12 @@ duckdb ~/working/FHIR-sandbox/synthea_nov2021.db
 # list databases
 .databases
 
+# list tables
+.tables
+
+# read in and execute SQL from external file
+.read import_data.sql
+
 # show current database
 SELECT current_database();
 
@@ -24,9 +30,6 @@ USE other_database;
 # detach database(s):
 # NOTE: use only name, no .db suffix
 DETACH persistent_duck;
-
-# list tables
-.tables
 
 # read in a CSV containing Synthea FHIR data (https://synthea.mitre.org/downloads/, '1K Sample Synthetic Patient Records, CSV'
 # autodetecting column types
