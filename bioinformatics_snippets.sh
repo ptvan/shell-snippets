@@ -24,6 +24,12 @@ seqtk seq -M region.bed in.fa > out.fa
 # trim low-quality bases (based by Phred scores)
 seqtk trimfq in.fastq > out.fastq
 
+# simulating 1,000,000 30 bp single-end human (hg38) reads with no sequencing error, outputs will be prefixed with `library1`
+dwgsim -1 30 -2 0 -N 1000000 ~/working/Databases/hg38.fa library1 
+
+# same as above but paired-end reads with 5% error, setting random seed to be reproducible, will run slower
+dwgsim -e 0.05 -1 30 -2 30 -z 31337 -N 1000000 ~/working/Databases/hg38.fa library1
+
 #############
 # BED files
 #############
