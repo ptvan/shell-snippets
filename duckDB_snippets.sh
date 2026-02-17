@@ -44,3 +44,11 @@ SELECT * FROM allergies ORDER BY PATIENT LIMIT 3;
 
 # delete table
 DROP TABLE allergies;
+
+## handling Parquet files
+# describe the columns of a 8GB Parquet file with ~41M rows:
+# (from https://datasets-documentation.s3.eu-west-3.amazonaws.com/amazon_reviews/amazon_reviews_2015.snappy.parquet)
+DESCRIBE SELECT * FROM 'amazon_reviews_2015.snappy.parquet';
+
+# aggregation is very fast
+SELECT star_rating, COUNT(star_rating) FROM 'amazon_reviews_2015.snappy.parquet' GROUP BY star_rating;
