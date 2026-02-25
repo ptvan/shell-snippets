@@ -12,6 +12,9 @@ COPY FROM DATABASE memory TO persistent_duck;
 # create a new persistent database
 duckdb ~/working/FHIR-sandbox/synthea_nov2021.db
 
+# launch a web-based interactive UI on `localhost:4213`
+duckdb -ui
+
 # list databases
 .databases
 
@@ -32,15 +35,20 @@ USE other_database;
 DETACH persistent_duck;
 
 # read in a CSV containing Synthea FHIR data (https://synthea.mitre.org/downloads/, '1K Sample Synthetic Patient Records, CSV'
-# autodetecting column types
-CREATE TABLE allergies 
-AS SELECT * FROM read_csv('~/working/FHIR-sandbox/synthea_nov2021/allergies.csv');
+# autodetecting column types and creating a new table
+CREATE TABLE allergies AS SELECT * FROM read_csv('~/working/FHIR-sandbox/synthea_nov2021_CSV/allergies.csv');
 
 # show columns
 DESCRIBE allergies;
 
 # order by one column and select a number of rows
 SELECT * FROM allergies ORDER BY PATIENT LIMIT 3;
+
+# !DuckDB-specific SQL: exclude specific columns
+SELECT * EXCLUDE ('REACTION2', 'DESCRIPTION2', 'SEVERITY2') FROM allergies;
+
+# !DuckDB-specific SQL: select columns by regex pattern
+SELECT COLUMNS('SEVERITY*') FROM allergies;
 
 # delete table
 DROP TABLE allergies;
@@ -51,4 +59,10 @@ DROP TABLE allergies;
 DESCRIBE SELECT * FROM 'amazon_reviews_2015.snappy.parquet';
 
 # aggregation is very fast
-SELECT star_rating, COUNT(star_rating) FROM 'amazon_reviews_2015.snappy.parquet' GROUP BY star_rating;
+# breaking down star rating from the same dataset above is instantaneous
+duckdb -c "SELECT star_rating, COUNT(star_rating) FROM 'amazon_reviews_2015.snappy.parquet' GROUP BY star_rating;"
+
+# converting from CSV to Parquet, autodetecting columns and renaming fields
+COPY (SELECT DATE AS ENCOUNTER_DATE, PATIENT AS PATIENT_ID, ENCOUNTER AS ENCOUNTER_ID 
+	    FROM read_csv('~/working/FHIR-sandbox/synthea_nov2021_CSV/observations.csv', AUTO_DETECT=TRUE))
+  TO '~/working/FHIR-sandbox/observations_recoded.parquet' (COMPRESSION zstd);
