@@ -58,9 +58,28 @@ DROP TABLE allergies;
 # (from https://datasets-documentation.s3.eu-west-3.amazonaws.com/amazon_reviews/amazon_reviews_2015.snappy.parquet)
 DESCRIBE SELECT * FROM 'amazon_reviews_2015.snappy.parquet';
 
-# aggregation is very fast
+# lower-level column information
+SELECT * FROM parquet_schema('amazon_reviews_2015.snappy.parquet');
+
+# built-in functions
+SELECT MAX(total_votes) FROM 'amazon_reviews_2015.snappy.parquet';
+
+## aggregation 
 # breaking down star rating from the same dataset above is instantaneous
 duckdb -c "SELECT star_rating, COUNT(star_rating) FROM 'amazon_reviews_2015.snappy.parquet' GROUP BY star_rating;"
+
+## views
+# list views
+FROM duckdb_views WHERE NOT internal;
+
+# duckdb views are virtual, results are re-calculated on demand
+CREATE VIEW by_star_verified AS SELECT * FROM 'amazon_reviews_2015.snappy.parquet' WHERE verified_purchase = true ORDER BY star_rating DESC;
+
+# querying views is the same as querying an actual table
+SELECT product_id, star_rating, helpful_votes, total_votes FROM by_star_verified ORDER BY helpful_votes DESC;
+
+# drop views
+DROP VIEW by_star_verified;
 
 # converting from CSV to Parquet, autodetecting columns and renaming fields
 COPY (SELECT DATE AS ENCOUNTER_DATE, PATIENT AS PATIENT_ID, ENCOUNTER AS ENCOUNTER_ID 
