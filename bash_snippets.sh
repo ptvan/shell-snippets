@@ -89,7 +89,7 @@ find ./ -type f 2> /dev/null | wc -l
 du -hcd1 ./ | sort -rh
 
 # find files > 50GB in current directory, lists them and their size
-find . -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
+find ./ -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
 
 # run a command on all results of a `find`, quick and dirty:
 find ./ -type f -name "*.txt" -exec gedit "{}" \;
@@ -158,11 +158,25 @@ mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 # run SQL-like statements
 mlr --csv filter '$status != "down" && $upsec >= 10000' *.csv
 
-## jq (https://github.com/jqlang/jq) can extract fields from JSONs and tabularize into CSV:
-jq -r '["destination_DOI", "year"] , (.message.reference[] | [.DOI,.year]) \
-           | @csv' prob1.json > destinations.csv
+## jq (https://github.com/jqlang/jq) 
 
-## CSVKit (https://github.com/wireservice/csvkit) list columns
+# extract fields from JSONs and tabularize into CSV:
+jq -r '["destination_DOI", "year"] , (.message.reference[] | [.DOI,.year]) \
+           | @csv' input.json > destinations.csv
+
+# merge multiple JSONs into a single new JSON
+jq -s '.[]' file1.json file2.json file3.json > combined.json
+
+# extract and concatenate fields
+jq 'map({user_id: .id, userDetails: {name: .name, DOB: .dob}})' input.json
+
+# filtering
+jq '.users[] | select(.age > 30 and .posts[] | .likes > 50)' input.json
+
+jq '.users[] | if .age > 30 then .id else empty end' input.json
+
+## CSVKit (https://github.com/wireservice/csvkit) 
+# list columns
 csvcut -n data.csv
 
 # convert Excel file to csv
