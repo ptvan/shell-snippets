@@ -85,6 +85,9 @@ done
 # count all normal files (no links or directories), squash 'Permission denied' messages
 find ./ -type f 2> /dev/null | wc -l
 
+# list all immediate sub-directories by size descending
+du -hcd1 ./ | sort -rh
+
 # find files > 50GB in current directory, lists them and their size
 find . -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
 
@@ -99,7 +102,7 @@ find ./ -type f -name "*.txt" -print0 | xargs -0 gedit
 find ./ -name '*.txt' -exec mv {} /new/path/ \;
 
 # invert match (eg. find all files that are _not_ .fastq):
-find . -name '*' -type f -not -path '*.fastq'
+find ./ -name '*' -type f -not -path '*.fastq'
 
 # compare 2 directories of R libraries, find libraries missing in 4.3
 # save these to a CSV
