@@ -81,6 +81,12 @@ SELECT product_id, star_rating, helpful_votes, total_votes FROM by_star_verified
 # drop views
 DROP VIEW by_star_verified;
 
+## macros
+# retrieve a specific customer's worst-reviewed product
+CREATE MACRO most_recent_worst_purchase(cid) AS TABLE
+SELECT customer_id, review_date, product_id, product_title FROM
+amazon_reviews_2015 WHERE customer_id = cid AND star_rating = 1 ORDER BY review_date DESC;
+
 # converting from CSV to Parquet, autodetecting columns and renaming fields
 COPY (SELECT DATE AS ENCOUNTER_DATE, PATIENT AS PATIENT_ID, ENCOUNTER AS ENCOUNTER_ID 
 	    FROM read_csv('~/working/FHIR-sandbox/synthea_nov2021_CSV/observations.csv', AUTO_DETECT=TRUE))
