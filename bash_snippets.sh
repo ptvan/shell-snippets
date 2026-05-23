@@ -158,6 +158,10 @@ mlr --csv uniq -c -g column1 sample.csv > sampleNoDuplicates.csv
 # run SQL-like statements
 mlr --csv filter '$status != "down" && $upsec >= 10000' *.csv
 
+# chain multiple operations, escaping spaces in column names by
+# using {} in `filter` and "" in `cut`
+mlr --csv filter '${Award Year} == "2026"' then cut -f Company,"Award Amount" award_data_no_abstract.csv
+
 ## jq (https://github.com/jqlang/jq) 
 
 # extract fields from JSONs and tabularize into CSV:
