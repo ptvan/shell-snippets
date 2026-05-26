@@ -142,6 +142,24 @@ samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 sambamba markdup sample.bam sample.nodups.bam
 
 #############
+# PAIR files
+#############
+# index, generating a corresponding .px2 file
+pairix sample.pairs.gz
+
+# print total line count, much faster than `wc`
+pairix -n sample.pairs.gz
+
+# list all pairs
+pairix -l sample.pairs.gz
+
+# manually querying multiple regions
+pairix sample.pairs.gz 'chr1:10000-20000|chr2:20000-30000'
+
+# querying using a supplied regions file
+pairix -L sample.pairs.gz my_ROIs.txt 
+
+#############
 # VCF files
 #############
 
