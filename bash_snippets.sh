@@ -244,6 +244,10 @@ pandoc -s input.tex -o output.docx
 pandoc -s input.docx -t markdown -o output.md
 
 ##### ImageMagick
+# convert WEBP to JPEG and resize
+convert big_picture.jpg -resize 800 longest_edge_800px.jpg
+convert big_picture.jpg -resize 50% half_size.jpg
+
 # convert multiple JPEGs into a single-page PDF
 convert *.jpg -auto-orient pictures.pdf
 
@@ -253,7 +257,7 @@ magick montage  '*.jpg' -geometry 50x50+2+2  image_index.gif
 ##### render Graphviz source files into images
 dot Tpng -O Graphviz_directed_graph.txt
 
-#####  HANDLING .tar.gz ARCHIVES
+##### Handling archive files
 # list contents of an archive without extracting
 tar -tzf my_archive.tar.gz
 
