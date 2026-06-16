@@ -55,9 +55,9 @@ bedtools coverage -hist -abam my_data.bam -b my_targets.bed
 bedtools genomecov -ibam mydata.bam -bga | awk '$4==0' | bedtools intersect -a regions.bed -b - > matches.txt
 
 
-#############
-# BAM files
-#############
+##################
+# SAM / BAM files
+##################
 
 # interconvert SAM <-> BAM
 samtools view -S -b sample.sam > sample.bam
@@ -138,8 +138,11 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 samtools view input.bam | awk '$6 ~ /S/{print $1}' | sort -k1,1 | uniq > soft-clipped-names.txt
 samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 
-# mark duplicate reads
+# mark duplicate reads using sambamba
 sambamba markdup sample.bam sample.nodups.bam
+
+# mark duplicate reads using samblaster
+bwa mem hg38_ref.fa sample.r1.fq sample.r2.fq | samblaster | samtools view -Sb - > sample.nodups.bam
 
 #############
 # PAIR files
