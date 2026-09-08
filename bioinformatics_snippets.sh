@@ -2,29 +2,33 @@
 # FASTA / FASTQ files
 ######################
 
+# FASTQC supports multi-threaded operation
+fastqc -o ./output_dir -t 10 *.fastq.gz
+
+# find barcodes that appear most frequently
+zcat sample.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
+
 # build a local BLAST database
 makeblastdb -in ref_viruses.fa -dbtype nucl -parse_seqids -out ref_viruses_db
 
 # BLAST against database, output in tabular form
 blastn -db db/ref_viruses_rep_genomes -query inputs.fa -outfmt 6
 
-# find barcodes that appear most frequently
-zcat sample.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
+# masking a reference genome using features from an external file
+bedtools maskfasta -fi hg38.fa -bed questionable_regions.bed -fo hg38_softmasked.fa 
 
-# FASTQC supports multi-threaded operation
-fastqc -o ./output_dir -t 10 *.fastq.gz
+# same as above, but soft masking (masked regions become lowercase instead of Ns)
+bedtools maskfasta -fi hg38.fa -bed bad_regions.bed -fo hg38_bad_masked.fa -soft
+seqtk seq -M region.bed in.fa > out.fa
 
-# randomly select 100 sequences from paired-end FASTQs,same seed to keep pairing
+# randomly select 100 sequences from paired-end FASTQs, same seed to keep reads paired
 seqtk sample -s100 read1.fq 10000 > sub1.fq
 seqtk sample -s100 read2.fq 10000 > sub2.fq
-
-# mask regions in BED to lower case
-seqtk seq -M region.bed in.fa > out.fa
 
 # trim low-quality bases (based by Phred scores)
 seqtk trimfq in.fastq > out.fastq
 
-# simulating 1,000,000 30 bp single-end human (hg38) reads with no sequencing error, outputs will be prefixed with `library1`
+# simulating 1,000,000 30-bp single-end human (hg38) reads with no sequencing error, outputs will be prefixed with `library1`
 dwgsim -1 30 -2 0 -N 1000000 ~/working/Databases/hg38.fa library1 
 
 # same as above but paired-end reads with 5% error, setting random seed to be reproducible, will run slower
@@ -138,10 +142,8 @@ samtools reheader -c 'perl -pe "s/^(@SQ.*)(\tSN:)Chr/\$1\$2/"' in.bam
 samtools view input.bam | awk '$6 ~ /S/{print $1}' | sort -k1,1 | uniq > soft-clipped-names.txt
 samtools view -hb -o output.bam -N soft-clipped-names.txt input.bam
 
-# mark duplicate reads using sambamba
+# mark duplicate reads 
 sambamba markdup sample.bam sample.nodups.bam
-
-# mark duplicate reads using samblaster
 bwa mem hg38_ref.fa sample.r1.fq sample.r2.fq | samblaster | samtools view -Sb - > sample.nodups.bam
 
 #############
@@ -181,6 +183,9 @@ bcftools --gvcf2vcf gVCF_file.vcf filename.vcf
 
 # merge multi-sample VCFs
 bcftools merge -Ob -o output.bcf sampleA.bcf sampleB.bcf
+
+# dump VCF fields into CSV
+bcftools query -f '%CHROM,%POS,%REF,%ALT,%QUAL\n' input.vcf > output.csv
 
 # printing only specific samples
 bcftools view -s NA20818,NA20819 filename.vcf.gz
