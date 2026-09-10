@@ -151,7 +151,7 @@ fi
 # extract the first column of a file and count unique entries
 cut -f 1 input.tsv | uniq | wc
 
-# add a column to a TSV
+# add colnames as first row of a TSV
 cat <(printf "name\taddress\tcity\tstate\tzipcode\tcountry\n") raw.tsv > demographics.tsv
 
 ## Miller (https://github.com/johnkerl/miller/) works on CSVs and JSON
