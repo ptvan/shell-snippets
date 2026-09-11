@@ -148,6 +148,9 @@ if [[ $str =~ [0-9]+\.[0-9]+ ]]; then
 fi
 
 ##### WORKING WITH TEXT DATA/CSV's
+# recursively convert all files from one character encoding to another
+find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
+
 # extract the first column of a file and count unique entries
 cut -f 1 input.tsv | uniq | wc
 
@@ -157,6 +160,9 @@ cat <(printf "name\taddress\tcity\tstate\tzipcode\tcountry\n") raw.tsv > demogra
 ## Miller (https://github.com/johnkerl/miller/) works on CSVs and JSON
 # keep specific columns, remove the rest
 mlr --tsv cut -f sseqid,sstart,send hg38_raw_BLAST.tsv > hg38_hits.bed
+
+# list unique entries in a column
+mlr --tsv cut -f sseqid hg38_raw_BLAST.tsv | uniq
 
 # filter using partial string match 
 mlr --tsv filter '$sseqid =~ "^(chr13|chr14|chr15|chr21|chr22)$"' hg38_raw_BLAST.tsv > hg38_BLAST_acrocentric_chroms.tsv
@@ -172,7 +178,6 @@ mlr --csv filter '$status != "down" && $upsec >= 10000' *.csv
 mlr --csv filter '${Award Year} == "2026"' then cut -f Company,"Award Amount" award_data_no_abstract.csv
 
 ## jq (https://github.com/jqlang/jq) 
-
 # extract fields from JSONs and tabularize into CSV:
 jq -r '["destination_DOI", "year"] , (.message.reference[] | [.DOI,.year]) \
            | @csv' input.json > destinations.csv
@@ -194,9 +199,6 @@ csvcut -n data.csv
 
 # convert Excel file to csv
 in2csv file.xlsx > file.csv
-
-# recursively convert all files from one character encoding to another
-find . -type f  -name '*.txt' -exec sh -c 'iconv -f cp1252 -t utf-8 "$1" > converted && mv converted "$1"' -- {} \;
 
 ##### WORKING WITH VIDEO FILES
 
@@ -266,6 +268,10 @@ magick montage  '*.jpg' -geometry 50x50+2+2  image_index.gif
 ##### render Graphviz source files into images
 dot Tpng -O Graphviz_directed_graph.txt
 
+##### Mermaid
+# specify dimension and resolution of output image
+mmdc -i diagram.md -o _test.png -w 3200 -H 2400 -s 6
+
 ##### Handling archive files
 # list contents of an archive without extracting
 tar -tzf my_archive.tar.gz
@@ -293,4 +299,3 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 
 # switch to different JRE (manually, without jEnv)
 /usr/libexec/java_home -v 11
-
