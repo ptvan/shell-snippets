@@ -14,7 +14,10 @@ git merge origin/develop
 # show branches
 git branch
 
-# switch to a new branch
+# create a new branch and immediately switch to it
+git switch -c brandnewbranch
+
+# switch to an existing branch
 git checkout someexistingbranch
 
 # delete a branch
