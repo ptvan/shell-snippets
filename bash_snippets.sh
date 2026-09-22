@@ -91,8 +91,8 @@ du -hcd1 ./ | sort -rh
 # find files > 50GB in current directory, lists them and their size
 find ./ -type f -size +50000000k -exec ls -lh {} \; | awk '{ print $9 ": " $5 }' 
 
-# run a command on all results of a `find`, quick and dirty:
-find ./ -type f -name "*.txt" -exec gedit "{}" \;
+# run a command on all results of a `find` (modified in the last hour), quick version:
+find ./ -type f -name "*.txt" -mmin 60 -exec gedit "{}" \;
 
 # nicer version: print0 gives a NULL after each entry to handle tricky filenames
 # xargs batches args before passing down the pipe, a bit more efficient

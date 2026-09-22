@@ -20,6 +20,9 @@ git checkout someexistingbranch
 # delete a branch
 git branch -d mybranch
 
+# make recursing submodules the default behavior 
+git config --global submodule.recurse true
+
 # unstage all staged files, revert all local uncommitted changes
 git reset
 git checkout .
