@@ -42,6 +42,14 @@ kill -l
 # send SIGINT to all processes owned by current user, gentler than -9
 kill -2 -1
 
+##### PARAMS FOR COMMON COMMANDS
+
+# list files by most recently modified
+ls -lt
+
+# show human-readible filesizes, include hidden files and last-modified date
+tree -haD
+
 ##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
@@ -67,6 +75,10 @@ fi
 # (depth 1)
 find . -maxdepth 1 -type d | while read -r dir
 do printf "%s:\t" "$dir"; find "$dir" -type f | wc -l; done
+
+# find files with exact sizes in the current directory 
+# Note: compares 12 digits in filesize
+ls -l | awk '/^-/ {print $5, $NF}' | sort -n | uniq -d -f 0 -w 12
 
 # simply rename a lot of files using a regex
 for f in *.png; do mv -n "$f" "${f/-0}"; done
