@@ -3,6 +3,12 @@
 git config --get remote.origin.url
 git remote show origin
 
+# switch to new remote URL
+git remote set-url origin https://github.com/new_url
+git remote -v
+git fetch origin
+git pull origin <branch>
+
 # clone from a PR
 git fetch origin pull/1888/head
 git checkout -b a_temporary_branch FETCH_HEAD
