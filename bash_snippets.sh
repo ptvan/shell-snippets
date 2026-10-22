@@ -311,3 +311,9 @@ echo "Here comes the output of my failing code" | tee >(pbcopy)
 
 # switch to different JRE (manually, without jEnv)
 /usr/libexec/java_home -v 11
+
+##### PROGRAMMING
+# lists the symbol table and attributes in a binary file,
+# useful for troubleshooting compilation/linking errors
+
+nm -C file_you_compiled.o
