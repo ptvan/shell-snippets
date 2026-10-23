@@ -266,6 +266,9 @@ pandoc -s input.tex -o output.docx
 # convert from DOCX to Markdown, including math
 pandoc -s input.docx -t markdown -o output.md
 
+# draw diagrams using mermaid-filter (https://github.com/raghur/mermaid-filter)
+pandoc -F mermaid-filter -o output.pdf input.md
+
 ##### ImageMagick
 # convert WEBP to JPEG and resize
 convert big_picture.jpg -resize 800 longest_edge_800px.jpg
