@@ -50,6 +50,10 @@ ls -lt
 # show human-readible filesizes, include hidden files and last-modified date
 tree -haD
 
+# recursively search contents of all text files, skip over binary files and/or directories
+grep -rI "super secret string" .
+grep -rI --exclude-dir=.git "don't look for me in git commits and logs" .
+
 ##### FILE HANDLING
 
 # process a batch of files, in this case converting PGM > JPEG
