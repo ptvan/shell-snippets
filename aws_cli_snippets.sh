@@ -70,3 +70,12 @@ sudo mount /dev/xvdf /data
 # 6. add following line to /etc/fstab to automount formatted volume
 # NOTE: UUID is from step 3 above
 UUID=aebf131c-6957-451e-8d34-ec978d9581ae  /data  xfs  defaults,nofail  0  2
+
+#### Mutagen (https://github.com/mutagen-io/mutagen)
+# to sync files between local and EC2 instance via SSH
+
+mutagen terminate -a
+mutagen create \
+        /Users/pvan/path/to/local/dir \
+        ec2-user@"$1":/home/ec2-user/remote/dir \
+        --ignore "*.gz","*fastq.gz","*.bam"
