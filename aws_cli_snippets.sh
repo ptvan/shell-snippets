@@ -1,3 +1,13 @@
+################
+# AWS LAMBDA
+################
+# get accessible Lambda functions from JSON output
+aws lambda list-functions | grep FunctionName
+
+################
+# AWS S3
+################
+
 # make new bucket
 aws s3 mb s3://remote-host/new-bucket-name --region us-west-2
 
@@ -6,6 +16,9 @@ aws s3 rb s3://remote-host/bucket-to-be-removed
 aws s3 rb s3://remote-host/bucket-to-be-removed --force
 
 # presign URL to share (maximum expiration 604800s = 7 days)
+# however, actual expiration could be capped by signing user's
+# authentication session: 
+# https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html#PresignedUrlFAQ
 aws s3 presign s3://remote-host/path/to/file_to_be_share.tar.gz --expires-in 604800
 
 # sync specific files from S3 by extension or pattern 
@@ -24,11 +37,15 @@ aws s3 ls --summarize --human-readable --recursive s3://path/to/my/folder/
 # print sequence index from FASTQ stored on S3 without downloading
 aws s3 cp s3://path/to/my/fastq.gz - | gzip -d - |  head -4
 
+################
+# AWS EC2/ECR
+################
+
 # list all instances names, public IP address and status
 aws ec2 describe-instances --query "Reservations[*].Instances[*].{PublicIP:PublicIpAddress,Name:Tags[?Key=='Name']|[0].Value,Status:State.Name}"
 
 # shows the latest 3 Docker images hosted on ECR
-aws ecr describe-images --repository-name docker.twinstrandbio.com/dsreportr/prod \
+aws ecr describe-images --repository-name docker.mycompany.com/my_ecr_repo/prod \
 --query 'sort_by(imageDetails,& imagePushedAt)[*].imageTags[0]' --output yaml \
 | tail -n 3 | awk -F'- ' '{print $2}'
 
@@ -50,7 +67,6 @@ sudo mkfs -t xfs /dev/xvdf
 sudo mkdir /data
 sudo mount /dev/xvdf /data
 
-# 6. add following line to  /etc/fstab to automount formatted volume
+# 6. add following line to /etc/fstab to automount formatted volume
 # NOTE: UUID is from step 3 above
 UUID=aebf131c-6957-451e-8d34-ec978d9581ae  /data  xfs  defaults,nofail  0  2
-
