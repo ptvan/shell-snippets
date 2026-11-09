@@ -17,8 +17,12 @@ git checkout -b a_temporary_branch FETCH_HEAD
 git pull
 git merge origin/develop
 
-# show branches
+# show local and remote branches, respectively
 git branch
+git branch -r
+
+# get all remote changes, including branches
+git fetch
 
 # create a new branch and immediately switch to it
 git switch -c brandnewbranch
