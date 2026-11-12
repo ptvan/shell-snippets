@@ -57,3 +57,6 @@ awk '!(NR % 3)' file1.txt > file2.txt
 
 # execute a command on each item of incoming pipe 
 ls *.fq.gz | awk 'dx upload --overwrite $1'
+
+# sum the third column of a TSV
+awk -F'\t' '{sum += $3} END {print sum}' data.tsv
