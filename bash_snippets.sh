@@ -304,6 +304,9 @@ gunzip < my_archive.tar.gz | tar -x -v --files-from files_to_extract.txt -f -
 bzip2 -t my_file.bz2
 gzip -t my_file.tar.gz
 
+# streaming SINGLE-END FASTQ from SRR directly into `pigz` using multiple threads 
+fastq-dump --stdout SRRsingle_end_dataset1 | pigz -p 16 > SRRsingle_end_dataset1.fastq.gz
+
 ##### GENERAL OPERATIONS
 
 # find all outdated pip packages and upgrade them
