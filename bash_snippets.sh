@@ -81,7 +81,8 @@ find . -maxdepth 1 -type d | while read -r dir
 do printf "%s:\t" "$dir"; find "$dir" -type f | wc -l; done
 
 # find files with exact sizes in the current directory 
-# Note: compares 12 digits in filesize
+# Note: compares 12 digits in filesize, fails on larger numbers
+# uniq compares adjacent lines, so needs sorted input
 ls -l | awk '/^-/ {print $5, $NF}' | sort -n | uniq -d -f 0 -w 12
 
 # simply rename a lot of files using a regex
