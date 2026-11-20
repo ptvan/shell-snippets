@@ -8,6 +8,9 @@ fastqc -o ./output_dir -t 10 *.fastq.gz
 # find barcodes that appear most frequently
 zcat sample.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
 
+# extract readnames
+seqkit fx2tab -n sample1_R1_001.fastq.gz > sample1_readnames.txt
+
 # build a local BLAST database
 makeblastdb -in ref_viruses.fa -dbtype nucl -parse_seqids -out ref_viruses_db
 
@@ -113,6 +116,8 @@ sambamba index sample.sorted.bam
 
 # extract read group information
 samtools view -H sample.sorted.bam | grep '^@RG'
+
+
 
 # extract bases 100 - 200 of chromosome 1
 sambamba slice sample.bam chr1:100-200 sample.chr1.bam
