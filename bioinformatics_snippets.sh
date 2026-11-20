@@ -100,8 +100,12 @@ samtools view -L regions.bed --fetch-pairs sample.bam
 samtools flagstat sample.bam
 
 # sort by alignment coordinates
+# multithread if possible. `ulimit -n 65536` might be necessary 
+# since many intermediate files are created
+# NOTE: for `samtools sort`, -m is _per thread_
+# for `sambamba sort`, -m sets _total memory limit across the entire process_
 samtools sort sample.bam -o sample.sorted.bam
-sambamba sort sample.bam -o sample.sorted.bam
+sambamba sort sample.bam -t 8 -m 16GB sample.sorted.bam
 
 # index, which allows fast extraction by region
 samtools index sample.sorted.bam
