@@ -8,7 +8,7 @@ fastqc -o ./output_dir -t 10 *.fastq.gz
 # find barcodes that appear most frequently
 zcat sample.fastq.gz | awk 'NR % 4 == 2 {print;}' | sort | uniq -c | sort -n -r | less
 
-# extract readnames
+# extract readnames, can be used to subselect a BAM (see BAM files notes section below)
 seqkit fx2tab -n sample1_R1_001.fastq.gz > sample1_readnames.txt
 
 # build a local BLAST database
@@ -117,7 +117,8 @@ sambamba index sample.sorted.bam
 # extract read group information
 samtools view -H sample.sorted.bam | grep '^@RG'
 
-
+# extract reads whose IDs are in a text file (see FASTQ section notes above)
+samtools view -b -N sample1_readnames.txt input.bam > excluded.bam
 
 # extract bases 100 - 200 of chromosome 1
 sambamba slice sample.bam chr1:100-200 sample.chr1.bam
@@ -245,6 +246,16 @@ bcftools annotate --remove INFO file.vcf.gz
 bcftools +split-vep test/split-vep.vcf -f '%CHROM:%POS %Consequence\n' -d
 
 #############
+# Picard
+#############
+
+# passing in Java options to picard if picard is installed as a wrapper script (eg. brew on OSX)
+export JAVA_TOOL_OPTIONS="-Xmx8g"; picard CompareSAMs sample1.bam sample2.bam O=comparison.tsv 
+
+# alternately, pass it in while invoking the wrapper script
+_JAVA_OPTIONS="-Xmx16g" picard CompareSAMs sample1.bam sample2.bam O=comparison.tsv 
+
+#############
 # VEP
 #############
 # installing VEP locally is annoying, also the human database is ~23GB 
@@ -352,4 +363,3 @@ plotProfile -m comparison.gz \
 GSE_ID=GSE162380
 BIOPROJECT_ID=$(esearch -db gds -query $GSE_ID | efetch -format docsum | xtract -pattern DocumentSummary -element BioProject)
 esearch -db sra -query $BIOPROJECT_ID | efetch -format runinfo  > ${GSE_ID}_runinfo.csv
-
